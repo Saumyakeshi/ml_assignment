@@ -1,0 +1,29 @@
+{
+  "seed": 42,
+  "data_dir": "data/raw/spamassassin",
+  "processed_dir": "data/processed/section_01",
+  "models_dir": "models/section_01",
+  "results_dir": "reports/section_01",
+  "test_fraction": 0.15,
+  "validation_fraction": 0.15,
+  "classic": {
+    "max_features": 20000,
+    "min_document_frequency": 2,
+    "max_document_frequency": 0.98,
+    "ngram_min": 1,
+    "ngram_max": 2,
+    "max_iterations": 1000
+  },
+  "lstm": {
+    "max_vocabulary": 20000,
+    "max_sequence_length": 300,
+    "embedding_dimension": 128,
+    "hidden_dimension": 128,
+    "dropout": 0.3,
+    "batch_size": 64,
+    "epochs": 6,
+    "learning_rate": 0.001,
+    "early_stopping_patience": 2
+  }
+}
+

@@ -6,11 +6,16 @@ This repository contains lecture-derived notes, assignment planning, datasets, e
 
 - [Assignment information](./docs/assignment/ASSIGNMENT_INFORMATION.md)
 - [Original assignment brief](./docs/assignment/COMP70049-Assignment.pdf)
+- [Section 1 demonstration](./docs/assignment/section-01-demonstration.md)
 - [Documentation index](./docs/README.md)
 - [Lecture notes index](./docs/lectures/README.md)
 - [Lecture note template](./docs/templates/lecture-notes-template.md)
 - [Data guidance](./data/README.md)
 - [Report guidance](./reports/README.md)
+
+## Section 1 quick start
+
+The Section 1 demonstration compares TF-IDF plus Logistic Regression with an LSTM on the assignment-recommended SpamAssassin corpus. Setup, execution, outputs, and interpretation guidance are documented in the [Section 1 walkthrough](./docs/assignment/section-01-demonstration.md).
 
 ## Repository structure
 

@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/comp70049/__init__.py
+src/comp70049/phishing/classic.py
+src/comp70049/phishing/data.py
+src/comp70049/phishing/evaluation.py
+src/comp70049/phishing/lstm.py
+src/comp70049/phishing/preprocessing.py
+src/comp70049/phishing/run.py
+src/comp70049_assignment.egg-info/PKG-INFO
+src/comp70049_assignment.egg-info/SOURCES.txt
+src/comp70049_assignment.egg-info/dependency_links.txt
+src/comp70049_assignment.egg-info/requires.txt
+src/comp70049_assignment.egg-info/top_level.txt
+tests/test_phishing_data.py
+tests/test_phishing_evaluation.py

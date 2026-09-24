@@ -16,6 +16,8 @@ ARCHIVES = {
 
 
 def _arguments() -> argparse.Namespace:
+    """Return the optional raw-data destination supplied by the user."""
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--destination",
@@ -26,6 +28,8 @@ def _arguments() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Download missing archives and extract each corpus class once."""
+
     destination = _arguments().destination.resolve()
     archive_dir = destination / "archives"
     archive_dir.mkdir(parents=True, exist_ok=True)
@@ -39,6 +43,8 @@ def main() -> None:
         else:
             print(f"Using existing archive {archive_path}")
 
+        # Existing downloads and extracted directories are reused so the setup
+        # command is safe and inexpensive to run more than once.
         expected = destination / extracted_dir
         if not expected.is_dir():
             print(f"Extracting {archive_path}")
@@ -52,4 +58,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

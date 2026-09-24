@@ -23,6 +23,10 @@ from sklearn.metrics import (
 
 
 def binary_metrics(labels: np.ndarray, probabilities: np.ndarray) -> dict[str, object]:
+    """Calculate thresholded and ranking metrics for binary predictions."""
+
+    # A fixed threshold makes the two models directly comparable. ROC AUC and
+    # average precision additionally describe ranking across all thresholds.
     predictions = (probabilities >= 0.5).astype(int)
     return {
         "accuracy": float(accuracy_score(labels, predictions)),
@@ -43,6 +47,8 @@ def binary_metrics(labels: np.ndarray, probabilities: np.ndarray) -> dict[str, o
 
 
 def save_metrics(metrics: dict[str, object], path: Path) -> None:
+    """Write a human-readable JSON metrics record, creating parents as needed."""
+
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
 
@@ -54,11 +60,15 @@ def save_evaluation_plots(
     model_name: str,
     output_dir: Path,
 ) -> list[Path]:
+    """Save confusion-matrix, ROC, and precision-recall figures for a model."""
+
     output_dir.mkdir(parents=True, exist_ok=True)
     predictions = (probabilities >= 0.5).astype(int)
     safe_name = model_name.lower().replace(" ", "-")
     created: list[Path] = []
 
+    # The confusion matrix exposes concrete false-positive and false-negative
+    # counts, which have different operational costs in email filtering.
     figure, axis = plt.subplots(figsize=(5.5, 4.5))
     ConfusionMatrixDisplay.from_predictions(
         labels,
@@ -75,6 +85,7 @@ def save_evaluation_plots(
     plt.close(figure)
     created.append(path)
 
+    # ROC shows discrimination over every possible decision threshold.
     false_positive_rate, true_positive_rate, _ = roc_curve(labels, probabilities)
     roc_auc = roc_auc_score(labels, probabilities)
     figure, axis = plt.subplots(figsize=(5.5, 4.5))
@@ -90,6 +101,7 @@ def save_evaluation_plots(
     plt.close(figure)
     created.append(path)
 
+    # Precision-recall is especially informative for the minority spam class.
     precision, recall, _ = precision_recall_curve(labels, probabilities)
     average_precision = average_precision_score(labels, probabilities)
     figure, axis = plt.subplots(figsize=(5.5, 4.5))
@@ -105,4 +117,3 @@ def save_evaluation_plots(
     created.append(path)
 
     return created
-

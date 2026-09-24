@@ -9,6 +9,8 @@ This repository contains lecture-derived notes, assignment planning, datasets, e
 - [Assignment guidance extracted from lectures](./docs/assignment/LECTURE_ASSIGNMENT_GUIDANCE.md)
 - [Section 1 demonstration](./docs/assignment/section-01-demonstration.md)
 - [Section 1 Colab notebook](./notebooks/01_phishing/section-01-email-security.ipynb)
+- [Section 2 demonstration](./docs/assignment/section-02-demonstration.md)
+- [Section 2 Colab notebook](./notebooks/02_intrusion_detection/section-02-intrusion-detection.ipynb)
 - [Documentation index](./docs/README.md)
 - [Lecture notes index](./docs/lectures/README.md)
 - [Lecture note template](./docs/templates/lecture-notes-template.md)
@@ -18,6 +20,10 @@ This repository contains lecture-derived notes, assignment planning, datasets, e
 ## Section 1 quick start
 
 The Section 1 demonstration compares TF-IDF plus Logistic Regression with an LSTM on the assignment-recommended SpamAssassin corpus. Setup, execution, outputs, and interpretation guidance are documented in the [Section 1 walkthrough](./docs/assignment/section-01-demonstration.md).
+
+## Section 2 quick start
+
+The Section 2 demonstration performs five-class intrusion detection on NSL-KDD, comparing a class-balanced Random Forest with a class-weighted 1D CNN. See the [Section 2 walkthrough](./docs/assignment/section-02-demonstration.md).
 
 ## Repository structure
 
@@ -41,7 +47,8 @@ The Section 1 demonstration compares TF-IDF plus Logistic Regression with an LST
 |   `-- 04_ransomware/              # Section 4 exploration and experiments
 |-- reports/
 |   |-- drafts/                     # Report source and working drafts
-|   `-- section_01/                 # Section 1 metrics, tables, and figures
+|   |-- section_01/                 # Section 1 metrics, tables, and figures
+|   `-- section_02/                 # Section 2 metrics, tables, and figures
 |-- scripts/                        # Reproducible command-line workflows
 |-- src/comp70049/
 |   |-- phishing/                   # Section 1 implementation

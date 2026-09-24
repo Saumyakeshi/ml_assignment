@@ -16,6 +16,10 @@ from .preprocessing import normalize_text
 
 
 def train_classic_model(train: pd.DataFrame, config: dict[str, object]) -> Pipeline:
+    """Fit a leakage-safe TF-IDF and Logistic Regression pipeline."""
+
+    # Keeping transformation and classification in one pipeline guarantees
+    # that document frequencies are learned from the training split only.
     model = Pipeline(
         steps=[
             (
@@ -30,6 +34,8 @@ def train_classic_model(train: pd.DataFrame, config: dict[str, object]) -> Pipel
                         int(config["ngram_min"]),
                         int(config["ngram_max"]),
                     ),
+                    # Sublinear scaling reduces the influence of terms repeated
+                    # many times in a single email.
                     sublinear_tf=True,
                 ),
             ),
@@ -37,6 +43,8 @@ def train_classic_model(train: pd.DataFrame, config: dict[str, object]) -> Pipel
                 "classifier",
                 LogisticRegression(
                     max_iter=int(config["max_iterations"]),
+                    # Spam is the minority class, so equal class weights would
+                    # otherwise bias the boundary toward the ham majority.
                     class_weight="balanced",
                     random_state=42,
                 ),
@@ -54,6 +62,10 @@ def evaluate_classic_model(
     model_dir: Path,
     results_dir: Path,
 ) -> dict[str, object]:
+    """Evaluate the fitted baseline and persist its model, metrics, and plots."""
+
+    # Probabilities support threshold-independent ROC and PR evaluation, while
+    # binary labels are derived centrally in binary_metrics at threshold 0.5.
     probabilities = model.predict_proba(test["text"])[:, 1]
     labels = test["label"].to_numpy(dtype=int)
     metrics = binary_metrics(labels, probabilities)
@@ -68,4 +80,3 @@ def evaluate_classic_model(
         output_dir=results_dir / "figures",
     )
     return metrics
-

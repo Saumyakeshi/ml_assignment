@@ -16,6 +16,8 @@ from .lstm import train_and_evaluate_lstm
 
 
 def _arguments() -> argparse.Namespace:
+    """Define command-line options for full and smoke-test runs."""
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--config",
@@ -37,10 +39,14 @@ def _arguments() -> argparse.Namespace:
 
 
 def _resolve(path_value: str) -> Path:
+    """Resolve configured paths relative to the current project directory."""
+
     return Path(path_value).resolve()
 
 
 def main() -> None:
+    """Execute data preparation, both models, and artifact generation."""
+
     arguments = _arguments()
     config = json.loads(arguments.config.read_text(encoding="utf-8"))
     if arguments.epochs is not None:
@@ -48,6 +54,8 @@ def main() -> None:
             raise ValueError("--epochs must be at least 1.")
         config["lstm"]["epochs"] = arguments.epochs
 
+    # Set library-level seeds before splitting or training so repeated runs use
+    # the same partitions and initial random state.
     seed = int(config["seed"])
     random.seed(seed)
     np.random.seed(seed)
@@ -73,6 +81,7 @@ def main() -> None:
         results_dir=results_dir,
     )
 
+    # Keep a shared schema so each model is compared on identical test metrics.
     comparison_rows = [
         {
             "model": "TF-IDF Logistic Regression",
@@ -116,6 +125,7 @@ def main() -> None:
     results_dir.mkdir(parents=True, exist_ok=True)
     comparison.to_csv(results_dir / "model-comparison.csv", index=False)
 
+    # The run summary provides provenance for the saved comparison table.
     summary = {
         "records_after_deduplication": len(frame),
         "train_records": len(splits.train),

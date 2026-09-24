@@ -6,6 +6,8 @@ The authoritative assignment files are stored in this directory:
 - [Original assignment brief](./COMP70049-Assignment.pdf)
 - [Assignment guidance extracted from lectures](./LECTURE_ASSIGNMENT_GUIDANCE.md)
 - [Section 1 demonstration](./section-01-demonstration.md)
+- [Section 2 demonstration](./section-02-demonstration.md)
+- [Section 2 Colab notebook](../../notebooks/02_intrusion_detection/section-02-intrusion-detection.ipynb)
 
 Use this directory for supporting planning documents such as:
 

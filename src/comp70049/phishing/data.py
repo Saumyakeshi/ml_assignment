@@ -19,31 +19,43 @@ WHITESPACE_PATTERN = re.compile(r"\s+")
 
 
 class _HTMLTextExtractor(HTMLParser):
+    """Collect visible text fragments while ignoring HTML markup."""
+
     def __init__(self) -> None:
         super().__init__()
         self.fragments: list[str] = []
 
     def handle_data(self, data: str) -> None:
+        """Record text encountered between HTML tags."""
+
         self.fragments.append(data)
 
     def text(self) -> str:
+        """Return the collected fragments as one space-delimited string."""
+
         return " ".join(self.fragments)
 
 
 @dataclass(frozen=True)
 class CorpusSplits:
+    """Container for the three mutually exclusive experiment partitions."""
+
     train: pd.DataFrame
     validation: pd.DataFrame
     test: pd.DataFrame
 
 
 def _html_to_text(value: str) -> str:
+    """Strip markup from an HTML email part without executing its content."""
+
     parser = _HTMLTextExtractor()
     parser.feed(value)
     return parser.text()
 
 
 def _part_text(part: Message) -> str:
+    """Decode one MIME part, replacing invalid bytes when necessary."""
+
     try:
         value = part.get_content()
     except (LookupError, UnicodeDecodeError):
@@ -60,6 +72,8 @@ def extract_email_text(path: Path) -> str:
     plain_parts: list[str] = []
     html_parts: list[str] = []
 
+    # Prefer plain text when both plain and HTML alternatives are available.
+    # Attachments are excluded because their contents are outside this text task.
     parts = message.walk() if message.is_multipart() else [message]
     for part in parts:
         if part.is_multipart():
@@ -77,6 +91,8 @@ def extract_email_text(path: Path) -> str:
 
 
 def _records_from_directory(directory: Path, label: int) -> list[dict[str, object]]:
+    """Parse every corpus message in a class directory into a record."""
+
     records: list[dict[str, object]] = []
     for path in sorted(directory.rglob("*")):
         if not path.is_file() or path.name.lower() == "cmds":
@@ -84,6 +100,8 @@ def _records_from_directory(directory: Path, label: int) -> list[dict[str, objec
         text = extract_email_text(path)
         if not text:
             continue
+        # Hash normalized extracted text so exact duplicates can be removed before
+        # splitting; otherwise the same message could leak into train and test.
         digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
         records.append(
             {
@@ -134,6 +152,8 @@ def stratified_splits(
     if test_fraction + validation_fraction >= 1:
         raise ValueError("Test and validation fractions must sum to less than one.")
 
+    # Split the test set first, then derive the validation proportion relative
+    # to the remaining records. Stratification preserves the minority spam rate.
     train_validation, test = train_test_split(
         frame,
         test_size=test_fraction,
@@ -170,4 +190,3 @@ def save_split_manifest(splits: CorpusSplits, output_dir: Path) -> Path:
     target = output_dir / "split_manifest.csv"
     pd.concat(parts, ignore_index=True).to_csv(target, index=False)
     return target
-

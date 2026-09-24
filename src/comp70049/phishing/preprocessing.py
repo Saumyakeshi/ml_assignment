@@ -14,6 +14,8 @@ WHITESPACE_PATTERN = re.compile(r"\s+")
 def normalize_text(text: str) -> str:
     """Normalize email text without learning anything from the full dataset."""
 
+    # Placeholder tokens retain the fact that an address or URL was present
+    # without letting unique identifiers dominate the learned vocabulary.
     text = text.lower()
     text = URL_PATTERN.sub(" urltoken ", text)
     text = EMAIL_PATTERN.sub(" emailtoken ", text)
@@ -26,4 +28,3 @@ def tokenize(text: str) -> list[str]:
 
     normalized = normalize_text(text)
     return normalized.split() if normalized else []
-

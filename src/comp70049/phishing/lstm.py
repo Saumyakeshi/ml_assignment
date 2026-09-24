@@ -27,15 +27,21 @@ UNKNOWN_TOKEN = "<UNK>"
 
 @dataclass
 class Vocabulary:
+    """Map normalized tokens to stable integer indices for the LSTM."""
+
     tokens: list[str]
 
     def __post_init__(self) -> None:
+        """Build the reverse lookup used during encoding."""
+
         self.token_to_index = {
             token: index for index, token in enumerate(self.tokens)
         }
 
     @classmethod
     def build(cls, texts: Iterable[str], max_size: int) -> "Vocabulary":
+        """Create a size-limited vocabulary from training messages only."""
+
         counts: Counter[str] = Counter()
         for text in texts:
             counts.update(tokenize(text))
@@ -43,6 +49,8 @@ class Vocabulary:
         return cls(tokens=[PAD_TOKEN, UNKNOWN_TOKEN, *most_common])
 
     def encode(self, text: str, max_length: int) -> tuple[list[int], int]:
+        """Convert text to padded token IDs and return its unpadded length."""
+
         unknown = self.token_to_index[UNKNOWN_TOKEN]
         encoded = [
             self.token_to_index.get(token, unknown)
@@ -56,19 +64,27 @@ class Vocabulary:
 
 
 class EmailDataset(Dataset[tuple[torch.Tensor, torch.Tensor, torch.Tensor]]):
+    """Pre-encoded email examples consumable by a PyTorch DataLoader."""
+
     def __init__(
         self,
         frame: pd.DataFrame,
         vocabulary: Vocabulary,
         max_length: int,
     ) -> None:
+        """Encode all messages once so batches do not repeat preprocessing."""
+
         self.labels = frame["label"].astype(float).tolist()
         self.examples = [vocabulary.encode(text, max_length) for text in frame["text"]]
 
     def __len__(self) -> int:
+        """Return the number of labelled email examples."""
+
         return len(self.labels)
 
     def __getitem__(self, index: int) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Return token IDs, sequence length, and binary label for one email."""
+
         encoded, length = self.examples[index]
         return (
             torch.tensor(encoded, dtype=torch.long),
@@ -78,6 +94,8 @@ class EmailDataset(Dataset[tuple[torch.Tensor, torch.Tensor, torch.Tensor]]):
 
 
 class EmailLSTM(nn.Module):
+    """Encode an email sequence and emit one spam-classification logit."""
+
     def __init__(
         self,
         *,
@@ -86,6 +104,8 @@ class EmailLSTM(nn.Module):
         hidden_dimension: int,
         dropout: float,
     ) -> None:
+        """Construct the embedding, recurrent encoder, and output head."""
+
         super().__init__()
         self.embedding = nn.Embedding(
             vocabulary_size,
@@ -101,7 +121,10 @@ class EmailLSTM(nn.Module):
         self.output = nn.Linear(hidden_dimension, 1)
 
     def forward(self, token_ids: torch.Tensor, lengths: torch.Tensor) -> torch.Tensor:
+        """Run a padded batch through the network and return raw logits."""
+
         embedded = self.embedding(token_ids)
+        # Packing prevents padding tokens from affecting the recurrent state.
         packed = pack_padded_sequence(
             embedded,
             lengths.cpu(),
@@ -117,6 +140,8 @@ def _predict(
     loader: DataLoader,
     device: torch.device,
 ) -> tuple[np.ndarray, np.ndarray]:
+    """Return true labels and spam probabilities with gradients disabled."""
+
     model.eval()
     probabilities: list[float] = []
     labels: list[int] = []
@@ -130,6 +155,8 @@ def _predict(
 
 
 def _save_training_plot(history: list[dict[str, float]], path: Path) -> None:
+    """Plot training loss and validation F1 on separate y-axes."""
+
     path.parent.mkdir(parents=True, exist_ok=True)
     epochs = [int(item["epoch"]) for item in history]
     losses = [item["training_loss"] for item in history]
@@ -165,11 +192,16 @@ def train_and_evaluate_lstm(
     model_dir: Path,
     results_dir: Path,
 ) -> dict[str, object]:
+    """Train with early stopping, evaluate on test data, and save artifacts."""
+
+    # Seed CPU, NumPy, CUDA, and DataLoader sampling for reproducible runs.
     torch.manual_seed(seed)
     np.random.seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
+    # The vocabulary is deliberately built from training text only to prevent
+    # validation or test token frequencies from influencing the representation.
     vocabulary = Vocabulary.build(
         train["text"],
         max_size=int(config["max_vocabulary"]),
@@ -197,6 +229,7 @@ def train_and_evaluate_lstm(
         dropout=float(config["dropout"]),
     ).to(device)
 
+    # Weight positive examples by the class ratio because spam is less common.
     positive_count = float(train["label"].sum())
     negative_count = float(len(train) - positive_count)
     positive_weight = torch.tensor([negative_count / positive_count], device=device)
@@ -226,6 +259,8 @@ def train_and_evaluate_lstm(
             total_loss += float(loss.item()) * len(labels)
             observations += len(labels)
 
+        # Validation F1 controls checkpoint selection and early stopping; the
+        # held-out test set is untouched until the final model has been chosen.
         validation_labels, validation_probabilities = _predict(
             model,
             validation_loader,
@@ -249,6 +284,8 @@ def train_and_evaluate_lstm(
         )
 
         if validation_f1 > best_f1:
+            # Copy the tensors now because state_dict values continue changing
+            # as subsequent epochs update the model in place.
             best_f1 = validation_f1
             best_state = copy.deepcopy(model.state_dict())
             epochs_without_improvement = 0

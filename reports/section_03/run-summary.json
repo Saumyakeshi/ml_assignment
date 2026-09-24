@@ -1,71 +1,7 @@
 {
-  "dataset": "CSE-CIC-IDS2018",
-  "source_day": "Thursday 1 March 2018",
-  "experiment": "binary unsupervised anomaly detection",
-  "training_policy": "benign records only",
-  "threshold_policy": "maximum validation F1",
-  "profiles": {
-    "train": {
-      "records": 72000,
-      "benign": 72000,
-      "anomaly": 0,
-      "missing_values": 1314,
-      "attack_label_counts": {
-        "Benign": 72000
-      }
-    },
-    "validation": {
-      "records": 33000,
-      "benign": 24000,
-      "anomaly": 9000,
-      "missing_values": 600,
-      "attack_label_counts": {
-        "Benign": 24000,
-        "Infilteration": 9000
-      }
-    },
-    "test": {
-      "records": 33000,
-      "benign": 24000,
-      "anomaly": 9000,
-      "missing_values": 644,
-      "attack_label_counts": {
-        "Benign": 24000,
-        "Infilteration": 9000
-      }
-    }
-  },
-  "raw_profile": {
-    "records": 331125,
-    "columns": 80,
-    "duplicate_records": 97,
-    "native_missing_values": 1834,
-    "blank_string_values": 0
-  },
-  "cleaning_report": {
-    "records_after_cleaning": 331027,
-    "rows_without_label_removed": 0,
-    "embedded_header_rows_removed": 25,
-    "duplicate_records_removed": 73,
-    "infinite_values_replaced_with_missing": 4000,
-    "non_numeric_values_coerced_to_missing": 0,
-    "invalid_timestamps": 0,
-    "features_dropped_for_missingness": [],
-    "remaining_missing_values": 5834,
-    "retained_feature_count": 66,
-    "class_counts": {
-      "benign": 237987,
-      "anomaly": 93040
-    },
-    "attack_label_counts": {
-      "Benign": 237987,
-      "Infilteration": 93040
-    }
-  },
-  "transformed_feature_count": 67,
-  "models_run": [
-    "Isolation Forest",
-    "Autoencoder"
-  ],
-  "autoencoder_epochs_requested": 12
+  "train_records": 72000,
+  "validation_records": 33000,
+  "test_records": 33000,
+  "features": 67,
+  "autoencoder_epochs": 12
 }

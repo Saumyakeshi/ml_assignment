@@ -57,7 +57,7 @@ Isolation Forest uses random partitioning trees. Sparse observations generally r
 
 ### Autoencoder
 
-The Autoencoder learns to reconstruct standardized benign traffic through a compressed latent layer. Mean squared reconstruction error is the anomaly score. It uses a `64 -> 32 -> 12 -> 32 -> 64` hidden/latent structure around the input/output layers, dropout, Adam optimization, and early stopping based only on benign validation reconstruction loss.
+The Autoencoder learns to reconstruct standardized benign traffic through a compressed latent layer. Mean squared reconstruction error is the anomaly score. It uses a `64 -> 32 -> 12 -> 32 -> 64` hidden/latent structure around the input/output layers, dropout, Adam optimization, and retains the epoch with the lowest benign validation reconstruction loss.
 
 ## Run the notebook
 
@@ -67,8 +67,8 @@ It installs dependencies, downloads and cleans the data, defines the models,
 and exports the results without cloning the repository or importing local
 source modules.
 
-Set `AUTOENCODER_EPOCHS_OVERRIDE = 1` in the configuration cell for a quick
-pipeline check. Leave it as `None` to use the configured full training schedule.
+Set `AUTOENCODER_EPOCHS = 1` near the top of the notebook for a quick pipeline
+check, or use the configured value of 12 for the full training schedule.
 
 ## Full configured result
 
@@ -77,13 +77,13 @@ The checked-in artifacts come from the configured 12-epoch Autoencoder run:
 | Model | TPR | FPR | Precision | F1 | Average precision | ROC AUC |
 |---|---:|---:|---:|---:|---:|---:|
 | Isolation Forest | 0.956 | 0.916 | 0.281 | 0.435 | 0.247 | 0.461 |
-| Autoencoder (12 epochs) | 0.997 | 0.888 | 0.296 | 0.457 | 0.277 | 0.517 |
+| Autoencoder (12 epochs) | 0.981 | 0.875 | 0.296 | 0.455 | 0.275 | 0.518 |
 
 These numbers are deliberately not presented as a successful detector. Maximizing validation F1 selected very permissive thresholds because the scores poorly separate infiltration from benign traffic. The models catch most attacks only by creating an operationally unacceptable number of false alerts. The Autoencoder reduced FPR relative to its one-epoch smoke run, but the completed training still does not establish that this representation reliably separates stealthy infiltration flows.
 
 ## Interpretation questions for the final report
 
-1. Why can high TPR be misleading when FPR is also above 90%?
+1. Why can high TPR be misleading when FPR is also extremely high?
 2. Do anomaly scores rank infiltration flows above benign flows, as shown by average precision and ROC AUC?
 3. How does changing the validation threshold trade missed attacks against analyst workload?
 4. Why must attacks remain absent from model-fitting data in this experimental design?

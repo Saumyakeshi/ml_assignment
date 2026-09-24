@@ -75,29 +75,25 @@ The Random Forest uses balanced subsample weights. The CNN uses square-root inve
 ## Run the models
 
 Run the notebook cells through the Random Forest section for the classical
-baseline only. Set `CNN_EPOCHS_OVERRIDE = 1` in the configuration cell for a
-quick CNN pipeline check, or leave it as `None` for the configured eight-epoch
-experiment with early stopping. A one-epoch result is a pipeline check, not the
-final deep-learning experiment.
+baseline only. Set `CNN_EPOCHS = 1` near the top of the notebook for a quick
+CNN pipeline check, or use the configured value of eight for the full
+experiment. A one-epoch result is a pipeline check, not the final experiment.
 
-## Current verified smoke results
+## Current validated results
 
 | Model | Accuracy | Macro precision | Macro recall | Macro F1 | Weighted F1 | Macro AP |
 |---|---:|---:|---:|---:|---:|---:|
 | Random Forest | 0.7377 | 0.7850 | 0.4738 | 0.4844 | 0.6955 | 0.6813 |
-| 1D CNN — one epoch | 0.7189 | 0.6826 | 0.5263 | 0.5103 | 0.6944 | 0.6587 |
+| 1D CNN — eight epochs | 0.7644 | 0.8310 | 0.5784 | 0.6036 | 0.7469 | 0.6960 |
 
 ### Initial interpretation
 
-- Random Forest has higher accuracy and macro precision.
-- The one-epoch CNN has higher macro recall and macro F1.
+- The eight-epoch CNN has higher values for every aggregate metric shown.
 - Both models perform well on normal, DoS, and Probe relative to R2L and U2R.
-- Random Forest U2R recall is only 0.02; the one-epoch CNN increases it to 0.15 but with very low U2R precision.
-- R2L recall remains below 0.07 for both models.
+- Random Forest recall is 0.039 for R2L and 0.020 for U2R.
+- The CNN raises recall to 0.283 for R2L and 0.090 for U2R, but both rare classes remain difficult.
 - Accuracy hides these failures because normal and DoS records dominate the dataset.
 - The official test set contains previously unseen attack types, so it is substantially harder than a random split from one combined table.
-
-Do not present the one-epoch CNN as the final model. Run the configured experiment, inspect the validation curves, and update the report with the final saved metrics.
 
 ## Outputs
 
@@ -114,11 +110,8 @@ reports/section_02/
 |-- model-comparison.csv
 |-- run-summary.json
 |-- figures/
-|   |-- training-class-distribution.png
-|   |-- random-forest-confusion-matrix.png
-|   |-- random-forest-precision-recall-curves.png
-|   |-- 1d-cnn-confusion-matrix.png
-|   |-- 1d-cnn-precision-recall-curves.png
+|   |-- random-forest-evaluation.png
+|   |-- cnn-evaluation.png
 |   `-- cnn-training-history.png
 `-- metrics/
     |-- random-forest.json

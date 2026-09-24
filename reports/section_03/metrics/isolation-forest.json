@@ -16,6 +16,5 @@
       398,
       8602
     ]
-  ],
-  "validation_threshold_method": "maximum F1"
+  ]
 }

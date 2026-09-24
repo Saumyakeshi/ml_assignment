@@ -1,86 +1,23 @@
 {
-  "threshold": 0.012857083231210709,
-  "true_positive_rate": 0.9968888888888889,
-  "false_positive_rate": 0.8875833333333333,
-  "precision": 0.296359912796459,
-  "recall": 0.9968888888888889,
-  "f1": 0.456892600702755,
-  "average_precision": 0.2767072898833523,
-  "roc_auc": 0.5173258912037036,
+  "threshold": 0.013987396843731403,
+  "true_positive_rate": 0.9806666666666667,
+  "false_positive_rate": 0.875375,
+  "precision": 0.29582704876822524,
+  "recall": 0.9806666666666667,
+  "f1": 0.45453843182696024,
+  "average_precision": 0.27543958748099134,
+  "roc_auc": 0.5176493287037037,
   "confusion_matrix": [
     [
-      2698,
-      21302
+      2991,
+      21009
     ],
     [
-      28,
-      8972
+      174,
+      8826
     ]
   ],
-  "validation_threshold_method": "maximum F1",
-  "epochs_completed": 12,
-  "best_normal_validation_loss": 0.1549498964746793,
-  "device": "cpu",
-  "training_history": [
-    {
-      "epoch": 1,
-      "train_loss": 0.863868235429128,
-      "normal_validation_loss": 0.5540353119373321
-    },
-    {
-      "epoch": 2,
-      "train_loss": 0.5694389434655508,
-      "normal_validation_loss": 0.3823732560475667
-    },
-    {
-      "epoch": 3,
-      "train_loss": 0.47319670298364425,
-      "normal_validation_loss": 0.32873966987927755
-    },
-    {
-      "epoch": 4,
-      "train_loss": 0.4231779999070697,
-      "normal_validation_loss": 0.28541814581553143
-    },
-    {
-      "epoch": 5,
-      "train_loss": 0.3791871191925473,
-      "normal_validation_loss": 0.24965051782131195
-    },
-    {
-      "epoch": 6,
-      "train_loss": 0.3464926630391015,
-      "normal_validation_loss": 0.22186587206522623
-    },
-    {
-      "epoch": 7,
-      "train_loss": 0.3021010973188612,
-      "normal_validation_loss": 0.2021012239853541
-    },
-    {
-      "epoch": 8,
-      "train_loss": 0.2850271264049742,
-      "normal_validation_loss": 0.18160892991224925
-    },
-    {
-      "epoch": 9,
-      "train_loss": 0.2675984879069858,
-      "normal_validation_loss": 0.1736884036064148
-    },
-    {
-      "epoch": 10,
-      "train_loss": 0.261620380587048,
-      "normal_validation_loss": 0.1628839498758316
-    },
-    {
-      "epoch": 11,
-      "train_loss": 0.26093207127518125,
-      "normal_validation_loss": 0.1549498964746793
-    },
-    {
-      "epoch": 12,
-      "train_loss": 0.2721217107243008,
-      "normal_validation_loss": 0.16135719255606334
-    }
-  ]
+  "best_normal_validation_loss": 0.17146435379981995,
+  "epochs": 12,
+  "device": "cpu"
 }

@@ -1,10 +1,275 @@
-# Machine Learning — Lecture 3, Part 2 Notes
+# Machine Learning — Lecture 3 Notes
 
-**Lecture date:** 26 July 2026
+**Lecture date:** 26 July 2026  
+**Main topics:** Data preprocessing, data profiling, normality, skewness, and probability distributions
 
-**Main topic:** Probability Distributions, Normality, Skewness, Uniform, Binomial, Poisson, and Exponential Distributions
+## Part 1 — Data Preprocessing and Profiling
 
-## 1. Continuation from Part 1
+### Why Data Pre-processing is Important
+Raw data often contains:
+- missing values
+- duplicate records
+- inconsistent values
+- noise
+- outliers
+- different scales
+- unnecessary features
+
+Goal:
+
+\[
+\boxed{
+\text{Raw Data}
+\rightarrow
+\text{Pre-processing}
+\rightarrow
+\text{Clean Data}
+\rightarrow
+\text{ML Model}
+}
+\]
+
+### Main Pre-processing Stages
+
+\[
+\boxed{
+Profiling
+\rightarrow
+EDA
+\rightarrow
+Cleaning
+\rightarrow
+Integration
+\rightarrow
+Transformation
+\rightarrow
+Reduction
+\rightarrow
+Splitting
+}
+\]
+
+### Data Profiling
+Data profiling gives an overview of a dataset.
+
+Check:
+- rows and columns
+- data types
+- missing values
+- unique values
+- min/max
+- mean/median
+
+#### ⭐ Special Note
+Understand the dataset **before** building a model.
+
+### Exploratory Data Analysis — EDA
+EDA is used to understand patterns and relationships.
+
+May include:
+- distributions
+- correlation
+- cross-tabulation
+- statistical tests
+- outlier detection
+- visualization
+
+Tests mentioned:
+- Chi-square
+- T-test
+- ANOVA
+
+### Data Cleaning
+Common tasks:
+- handling missing values
+- handling noise
+- detecting outliers
+
+Missing values can be treated using:
+- deletion
+- mean
+- median
+- mode
+- other imputation techniques
+
+#### ⭐ Special Note
+There is no one best missing-value method for every dataset.
+
+### Noise and Outliers
+Methods mentioned:
+- binning
+- regression
+- clustering
+- Z-score
+- IQR
+
+Outliers can distort statistics such as the mean.
+
+### Data Integration
+Combines data from multiple sources.
+
+Potential problems:
+- duplicate records
+- conflicting values
+- different units
+- inconsistent naming
+
+### Data Transformation
+Methods include:
+- normalization
+- generalization
+- aggregation
+
+#### Normalization
+Transforms values into a common range, for example:
+
+\[
+0 \le x \le 1
+\]
+
+Useful when features have very different numeric scales.
+
+### Data Reduction
+Methods include:
+- feature selection
+- feature extraction
+- sampling
+- compression
+- discretization
+
+#### ⭐ Special Note
+More features do not automatically mean a better model.
+
+### Data Splitting
+The dataset is divided into:
+- training data
+- testing data
+
+### Data Profiling in Python
+The **Iris dataset** was used.
+
+Features include:
+- sepal length
+- sepal width
+- petal length
+- petal width
+
+Pandas can inspect data types using:
+
+```python
+df.dtypes
+```
+
+### Summary Statistics
+Common statistics:
+- count
+- mean
+- standard deviation
+- minimum
+- maximum
+- quartiles
+
+Mean:
+
+\[
+\text{Mean} =
+\frac{x_1+x_2+\cdots+x_n}{n}
+\]
+
+### Cardinality
+
+\[
+\boxed{\text{Cardinality} = \text{number of unique values}}
+\]
+
+#### Low Cardinality
+Few unique values.
+
+Example:
+- Male
+- Female
+
+#### High Cardinality
+Many unique values.
+
+Examples:
+- User ID
+- Email
+- Transaction ID
+- IP address
+
+#### ⭐ Special Note
+High-cardinality identifiers may add complexity without helping prediction.
+
+### Data Distribution
+A distribution describes how values are spread.
+
+Examples:
+- Normal
+- Uniform
+- Skewed
+
+### Normal Distribution
+The Normal (Gaussian) Distribution is a symmetric bell-shaped distribution.
+
+For an ideal normal distribution:
+
+\[
+\text{Mean}=\text{Median}=\text{Mode}
+\]
+
+Probability density:
+
+\[
+f(x)=
+\frac{1}{\sigma\sqrt{2\pi}}
+e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}
+\]
+
+where:
+- \(\mu\) = mean
+- \(\sigma\) = standard deviation
+- \(\sigma^2\) = variance
+
+#### Effect of Mean
+\[
+\boxed{\mu \rightarrow \text{center/location}}
+\]
+
+#### Effect of Standard Deviation
+\[
+\boxed{\sigma \rightarrow \text{spread}}
+\]
+
+### Z-Score
+
+\[
+\boxed{
+z=\frac{x-\mu}{\sigma}
+}
+\]
+
+The Z-score tells how many standard deviations a value lies from the mean and can help detect outliers.
+
+### ⭐ Important Revision Points
+1. Preprocess raw data before training
+2. Profiling → EDA → Cleaning → Integration → Transformation → Reduction → Splitting
+3. Missing-value handling
+4. Outlier detection
+5. Normalization
+6. Feature reduction
+7. Cardinality
+8. High-cardinality IDs may be unhelpful
+9. Normal distribution
+10. \(\mu\) = center
+11. \(\sigma\) = spread
+12. Z-score for distance from the mean
+
+---
+
+## Part 2 — Probability Distributions
+
+### Continuation from Part 1
 
 Part 1 introduced data preprocessing, data profiling, distributions, the normal distribution, standard deviation, and Z-scores.
 
@@ -20,7 +285,7 @@ Understanding the distribution of a feature is important because many statistica
 
 ---
 
-## 2. Normal Distribution Recap
+### Normal Distribution Recap
 
 A **Normal Distribution** is a continuous probability distribution with a bell-shaped curve.
 
@@ -54,7 +319,7 @@ and the curve is symmetrical around the mean.
 
 ---
 
-## 3. Effect of Mean and Standard Deviation
+### Effect of Mean and Standard Deviation
 
 Changing the **mean** moves the center of the distribution.
 
@@ -70,7 +335,7 @@ Changing the **standard deviation** changes the spread.
 
 A smaller standard deviation gives a narrower distribution, while a larger standard deviation gives a wider one.
 
-### ⭐ Special Note
+#### ⭐ Special Note
 
 Two normal distributions can have:
 
@@ -81,13 +346,13 @@ Therefore, both \(\mu\) and \(\sigma\) are needed to describe a normal distribut
 
 ---
 
-## 4. Skewness
+### Skewness
 
 Real-world data does not always follow a perfectly symmetric normal distribution.
 
 A distribution can be **skewed**.
 
-### Positive Skew / Right Skew
+#### Positive Skew / Right Skew
 
 A positively skewed distribution has a longer tail on the **right side**.
 
@@ -112,7 +377,7 @@ Examples can include:
 - network latency
 - file sizes
 
-### Negative Skew / Left Skew
+#### Negative Skew / Left Skew
 
 A negatively skewed distribution has a longer tail toward the **left side**.
 
@@ -128,7 +393,7 @@ Typical relationship:
 \text{Mean} < \text{Median}
 \]
 
-### ⭐ Special Note
+#### ⭐ Special Note
 
 Remember the direction of skewness using the **tail**, not where most of the values are.
 
@@ -142,7 +407,7 @@ Remember the direction of skewness using the **tail**, not where most of the val
 
 ---
 
-## 5. Why Skewness Matters
+### Why Skewness Matters
 
 Many ML and statistical techniques work better when the data is reasonably well behaved.
 
@@ -166,11 +431,11 @@ depending on the dataset.
 
 ---
 
-## 6. Histogram and KDE
+### Histogram and KDE
 
 The lecture used visual methods to inspect distribution shape.
 
-### Histogram
+#### Histogram
 
 A histogram divides values into ranges called **bins** and shows how many observations occur in each range.
 
@@ -181,13 +446,13 @@ It helps identify:
 - outliers
 - multiple peaks
 
-### KDE — Kernel Density Estimate
+#### KDE — Kernel Density Estimate
 
 A **Kernel Density Estimate** produces a smoother estimate of the distribution.
 
 A histogram may look like discrete bars, while KDE gives a smooth curve.
 
-### ⭐ Special Note
+#### ⭐ Special Note
 
 Visual inspection is useful, but it should not be the only way to determine whether data follows a normal distribution.
 
@@ -195,7 +460,7 @@ Statistical tests can also be used.
 
 ---
 
-## 7. Testing for Normality
+### Testing for Normality
 
 The lecture demonstrated methods for checking whether a dataset is normally distributed.
 
@@ -206,7 +471,7 @@ Two tests shown were:
 
 ---
 
-## 8. Shapiro-Wilk Test
+### Shapiro-Wilk Test
 
 The Shapiro-Wilk test checks whether the data is consistent with a normal distribution.
 
@@ -244,7 +509,7 @@ p < 0.05
 
 the data is usually considered significantly different from a normal distribution.
 
-### ⭐ Special Note
+#### ⭐ Special Note
 
 A useful rule for revision:
 
@@ -260,7 +525,7 @@ This does not prove that a dataset is perfectly normal; it is a statistical deci
 
 ---
 
-## 9. Kolmogorov-Smirnov Test
+### Kolmogorov-Smirnov Test
 
 The **Kolmogorov-Smirnov test** can compare the observed data distribution against a reference distribution.
 
@@ -276,7 +541,7 @@ The general principle remains:
 
 ---
 
-## 10. Uniform Distribution
+### Uniform Distribution
 
 The lecture then introduced the **Uniform Distribution**.
 
@@ -317,7 +582,7 @@ The graph is flat because each value in the interval is equally likely.
 
 ---
 
-## 11. Uniform Distribution Example
+### Uniform Distribution Example
 
 One example discussed was **random cryptographic key generation**.
 
@@ -325,7 +590,7 @@ Ideally, keys should be generated so that every possible valid key has an equal 
 
 A uniform distribution is suitable for this because no one outcome should be favored.
 
-### ⭐ Special Note
+#### ⭐ Special Note
 
 Uniform distribution means:
 
@@ -337,11 +602,11 @@ This is particularly important in security-related random generation.
 
 ---
 
-## 12. Continuous vs Discrete Distributions
+### Continuous vs Discrete Distributions
 
 The lecture covered both continuous and discrete distributions.
 
-### Continuous distribution
+#### Continuous distribution
 
 Can take any value within an interval.
 
@@ -351,7 +616,7 @@ Examples:
 - Uniform
 - Exponential
 
-### Discrete distribution
+#### Discrete distribution
 
 Takes countable values such as:
 
@@ -364,7 +629,7 @@ Examples:
 - Binomial
 - Poisson
 
-### ⭐ Special Note
+#### ⭐ Special Note
 
 A useful distinction:
 
@@ -378,7 +643,7 @@ A useful distinction:
 
 ---
 
-## 13. Binomial Distribution
+### Binomial Distribution
 
 A **Binomial Distribution** models the number of successes in a fixed number of independent trials.
 
@@ -409,7 +674,7 @@ where:
 
 ---
 
-## 14. Conditions for Binomial Distribution
+### Conditions for Binomial Distribution
 
 A situation is binomial when:
 
@@ -424,7 +689,7 @@ For example:
 
 This can be represented using a binomial distribution if the required assumptions are satisfied.
 
-### ⭐ Special Note
+#### ⭐ Special Note
 
 Remember:
 
@@ -434,7 +699,7 @@ Remember:
 
 ---
 
-## 15. Effect of \(n\) and \(p\) on Binomial Shape
+### Effect of \(n\) and \(p\) on Binomial Shape
 
 The appearance of the binomial distribution depends on:
 
@@ -455,7 +720,7 @@ Increasing the number of trials generally changes the distribution shape and can
 
 ---
 
-## 16. Poisson Distribution
+### Poisson Distribution
 
 The **Poisson Distribution** models how many times an event occurs within a fixed interval of:
 
@@ -487,7 +752,7 @@ where:
 
 ---
 
-## 17. Meaning of Lambda \(\lambda\)
+### Meaning of Lambda \(\lambda\)
 
 In the Poisson distribution:
 
@@ -515,7 +780,7 @@ The Poisson distribution can then estimate probabilities such as:
 
 ---
 
-## 18. Shape of Poisson Distribution
+### Shape of Poisson Distribution
 
 The distribution shape changes depending on \(\lambda\).
 
@@ -523,7 +788,7 @@ For a small \(\lambda\), the distribution tends to be strongly right-skewed.
 
 As \(\lambda\) increases, the distribution becomes wider and tends to appear more symmetric.
 
-### ⭐ Special Note
+#### ⭐ Special Note
 
 Poisson is especially useful when dealing with:
 
@@ -533,11 +798,11 @@ Poisson is especially useful when dealing with:
 
 ---
 
-## 19. Binomial vs Poisson
+### Binomial vs Poisson
 
 These two can be confusing.
 
-### Binomial
+#### Binomial
 
 Concerned with:
 
@@ -549,7 +814,7 @@ Example:
 10 \text{ login attempts}
 \]
 
-### Poisson
+#### Poisson
 
 Concerned with:
 
@@ -577,7 +842,7 @@ A simple memory aid:
 
 ---
 
-## 20. Exponential Distribution
+### Exponential Distribution
 
 The final major distribution discussed was the **Exponential Distribution**.
 
@@ -613,7 +878,7 @@ where:
 
 ---
 
-## 21. Example of Exponential Distribution
+### Example of Exponential Distribution
 
 Suppose attacks arrive randomly.
 
@@ -638,11 +903,11 @@ Other examples include:
 
 ---
 
-## 22. Relationship Between Poisson and Exponential
+### Relationship Between Poisson and Exponential
 
 This was an important conceptual relationship.
 
-### Poisson
+#### Poisson
 
 Counts the number of events:
 
@@ -650,7 +915,7 @@ Counts the number of events:
 \boxed{\text{How many events?}}
 \]
 
-### Exponential
+#### Exponential
 
 Models waiting time:
 
@@ -666,7 +931,7 @@ Both use an event rate:
 
 and are closely connected when events occur randomly and independently.
 
-### ⭐ Special Note
+#### ⭐ Special Note
 
 This distinction is worth remembering:
 
@@ -684,7 +949,7 @@ This distinction is worth remembering:
 
 ---
 
-## 23. Effect of Lambda on Exponential Distribution
+### Effect of Lambda on Exponential Distribution
 
 For:
 
@@ -700,7 +965,7 @@ A lower \(\lambda\) means events occur less frequently, resulting in longer wait
 
 ---
 
-## 24. Probability Distributions in Cybersecurity
+### Probability Distributions in Cybersecurity
 
 The distributions discussed in this lecture can be useful in security-related analysis.
 
@@ -731,7 +996,7 @@ This shows why statistical distributions are useful for Machine Learning and cyb
 
 ---
 
-# ⭐ Special Notes / Lecturer Emphasis
+### ⭐ Special Notes / Lecturer Emphasis
 
 For revision, focus especially on these points:
 
@@ -801,7 +1066,7 @@ f(x)=\lambda e^{-\lambda x}
 
 ---
 
-# Very Short Revision Summary
+### Very Short Revision Summary
 
 The main distributions in this lecture can be remembered like this:
 
@@ -837,3 +1102,4 @@ f(x)=\lambda e^{-\lambda x}
 \]
 
 The **core lesson of Lecture 3 Part 2** is that understanding the underlying probability distribution of data helps us choose appropriate preprocessing, statistical analysis, and Machine Learning techniques.
+

@@ -58,6 +58,12 @@ Both models use the same held-out test set and a fixed threshold of 0.5. The run
 The complete narrative and executable workflow is available in the
 [Section 1 Colab notebook](../../notebooks/01_phishing/section-01-email-security.ipynb).
 
+When using the VS Code Colab extension, connect to a hosted runtime and upload
+`pyproject.toml` plus the `configs`, `scripts`, and `src` folders through the
+Explorer's **Upload to Colab** action. Keep them together under `/content`.
+Do not upload `.venv`, raw data, or trained models. The hosted runtime cannot
+directly access the local Windows path.
+
 From the repository root:
 
 ```powershell

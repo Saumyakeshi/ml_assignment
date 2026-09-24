@@ -11,6 +11,8 @@ This repository contains lecture-derived notes, assignment planning, datasets, e
 - [Section 1 Colab notebook](./notebooks/01_phishing/section-01-email-security.ipynb)
 - [Section 2 demonstration](./docs/assignment/section-02-demonstration.md)
 - [Section 2 Colab notebook](./notebooks/02_intrusion_detection/section-02-intrusion-detection.ipynb)
+- [Section 3 demonstration](./docs/assignment/section-03-demonstration.md)
+- [Section 3 Colab notebook](./notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb)
 - [Documentation index](./docs/README.md)
 - [Lecture notes index](./docs/lectures/README.md)
 - [Lecture note template](./docs/templates/lecture-notes-template.md)
@@ -24,6 +26,10 @@ The Section 1 demonstration compares TF-IDF plus Logistic Regression with an LST
 ## Section 2 quick start
 
 The Section 2 demonstration performs five-class intrusion detection on NSL-KDD, comparing a class-balanced Random Forest with a class-weighted 1D CNN. See the [Section 2 walkthrough](./docs/assignment/section-02-demonstration.md).
+
+## Section 3 quick start
+
+The Section 3 demonstration cleans an unmodified CSE-CIC-IDS2018 daily flow CSV and compares a normal-only Isolation Forest with an Autoencoder. See the [Section 3 walkthrough](./docs/assignment/section-03-demonstration.md).
 
 ## Repository structure
 
@@ -48,7 +54,8 @@ The Section 2 demonstration performs five-class intrusion detection on NSL-KDD, 
 |-- reports/
 |   |-- drafts/                     # Report source and working drafts
 |   |-- section_01/                 # Section 1 metrics, tables, and figures
-|   `-- section_02/                 # Section 2 metrics, tables, and figures
+|   |-- section_02/                 # Section 2 metrics, tables, and figures
+|   `-- section_03/                 # Section 3 metrics, tables, and figures
 |-- scripts/                        # Reproducible command-line workflows
 |-- src/comp70049/
 |   |-- phishing/                   # Section 1 implementation

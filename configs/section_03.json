@@ -1,0 +1,28 @@
+{
+  "seed": 42,
+  "data_file": "data/raw/cic-ids2018/Thursday-01-03-2018_TrafficForML_CICFlowMeter.csv",
+  "processed_dir": "data/processed/section_03",
+  "models_dir": "models/section_03",
+  "results_dir": "reports/section_03",
+  "max_benign_records": 120000,
+  "max_anomaly_records": 18000,
+  "benign_train_fraction": 0.6,
+  "benign_validation_fraction": 0.2,
+  "anomaly_validation_fraction": 0.5,
+  "maximum_missing_fraction": 0.4,
+  "isolation_forest": {
+    "n_estimators": 200,
+    "max_samples": 10000,
+    "contamination": "auto"
+  },
+  "autoencoder": {
+    "hidden_dimensions": [64, 32],
+    "latent_dimension": 12,
+    "dropout": 0.1,
+    "batch_size": 1024,
+    "epochs": 12,
+    "learning_rate": 0.001,
+    "weight_decay": 0.00001,
+    "early_stopping_patience": 3
+  }
+}

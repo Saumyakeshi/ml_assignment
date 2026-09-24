@@ -1,0 +1,21 @@
+{
+  "threshold": 0.31872220807957147,
+  "true_positive_rate": 0.9557777777777777,
+  "false_positive_rate": 0.915625,
+  "precision": 0.2813225627105341,
+  "recall": 0.9557777777777777,
+  "f1": 0.43469691992824117,
+  "average_precision": 0.24735438322142042,
+  "roc_auc": 0.46057264814814813,
+  "confusion_matrix": [
+    [
+      2025,
+      21975
+    ],
+    [
+      398,
+      8602
+    ]
+  ],
+  "validation_threshold_method": "maximum F1"
+}

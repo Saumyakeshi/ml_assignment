@@ -7,4 +7,4 @@
 
 For each dataset, record its source, license, download date, checksum if available, target variable, and known limitations in `docs/research/`.
 
-Do not overwrite raw data. Make transformations reproducible through code in `src/comp70049/` or `scripts/`.
+Do not overwrite raw data. Keep every transformation reproducible in the relevant self-contained notebook.

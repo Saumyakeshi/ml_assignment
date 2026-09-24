@@ -15,13 +15,9 @@ The implementation also reports precision, F1, average precision, ROC AUC, confu
 
 ## Data download
 
-From the repository root:
-
-```powershell
-.\.venv\Scripts\python.exe .\scripts\download_cic_ids2018.py
-```
-
-The script downloads one official 103 MiB CSV from the public CSE-CIC-IDS2018 AWS bucket, verifies its byte size and SHA-256 checksum, and saves it under the Git-ignored `data/raw/cic-ids2018/` directory.
+The notebook's data cell downloads one official 103 MiB CSV from the public
+CSE-CIC-IDS2018 AWS bucket, verifies its byte size and SHA-256 checksum, and
+saves it under the Git-ignored `data/raw/cic-ids2018/` directory.
 
 ## Cleaning performed
 
@@ -48,7 +44,10 @@ The split differs from ordinary supervised classification:
 - **Validation:** benign plus infiltration flows; labels select each score threshold.
 - **Test:** held-out benign plus infiltration flows; used once for final evaluation.
 
-The default sample produces 72,000 training, 33,000 validation, and 33,000 test records. Configuration is stored in [`configs/section_03.json`](../../configs/section_03.json).
+The default sample produces 72,000 training, 33,000 validation, and 33,000 test
+records. Runtime parameters are defined near the top of the notebook; the file
+[`configs/section_03.json`](../../configs/section_03.json) remains only as a
+reference copy of the earlier configuration.
 
 ## Models
 
@@ -60,22 +59,16 @@ Isolation Forest uses random partitioning trees. Sparse observations generally r
 
 The Autoencoder learns to reconstruct standardized benign traffic through a compressed latent layer. Mean squared reconstruction error is the anomaly score. It uses a `64 -> 32 -> 12 -> 32 -> 64` hidden/latent structure around the input/output layers, dropout, Adam optimization, and early stopping based only on benign validation reconstruction loss.
 
-## Run locally
+## Run the notebook
 
-Install dependencies and execute:
+Open [`notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb`](../../notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb)
+locally or through the VS Code Colab extension and run it from top to bottom.
+It installs dependencies, downloads and cleans the data, defines the models,
+and exports the results without cloning the repository or importing local
+source modules.
 
-```powershell
-python -m pip install -e ".[deep,dev]"
-.\.venv\Scripts\python.exe .\scripts\run_section_03.py
-```
-
-For a one-epoch pipeline check:
-
-```powershell
-.\.venv\Scripts\python.exe .\scripts\run_section_03.py --epochs 1
-```
-
-The executable Colab workflow is in [`notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb`](../../notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb). It clones the repository automatically in a fresh hosted runtime.
+Set `AUTOENCODER_EPOCHS_OVERRIDE = 1` in the configuration cell for a quick
+pipeline check. Leave it as `None` to use the configured full training schedule.
 
 ## Full configured result
 

@@ -1,6 +1,6 @@
 # COMP70049 Machine Learning in Cyber
 
-This repository contains lecture-derived notes, assignment planning, datasets, experiments, implementation code, and report artifacts for the COMP70049 assignment.
+This repository contains lecture-derived notes, assignment planning, datasets, self-contained experiment notebooks, and report artifacts for the COMP70049 assignment.
 
 ## Start here
 
@@ -36,7 +36,7 @@ The Section 3 demonstration cleans an unmodified CSE-CIC-IDS2018 daily flow CSV 
 ```text
 .
 |-- README.md                       # Repository entry point
-|-- configs/                        # Experiment configuration files
+|-- configs/                        # Reference copies of experiment parameters
 |-- data/
 |   |-- processed/                  # Model-ready manifests and outputs
 |   `-- raw/                        # Immutable original datasets
@@ -51,18 +51,11 @@ The Section 3 demonstration cleans an unmodified CSE-CIC-IDS2018 daily flow CSV 
 |   |-- 02_intrusion_detection/     # Section 2 exploration and experiments
 |   |-- 03_anomaly_detection/       # Section 3 exploration and experiments
 |   `-- 04_ransomware/              # Section 4 exploration and experiments
-|-- reports/
+`-- reports/
 |   |-- drafts/                     # Report source and working drafts
 |   |-- section_01/                 # Section 1 metrics, tables, and figures
 |   |-- section_02/                 # Section 2 metrics, tables, and figures
 |   `-- section_03/                 # Section 3 metrics, tables, and figures
-|-- scripts/                        # Reproducible command-line workflows
-|-- src/comp70049/
-|   |-- phishing/                   # Section 1 implementation
-|   |-- intrusion_detection/        # Section 2 implementation
-|   |-- anomaly_detection/          # Section 3 implementation
-|   `-- ransomware/                 # Section 4 implementation
-`-- tests/                          # Automated tests
 ```
 
 ## Working conventions
@@ -79,9 +72,9 @@ Start each file from `docs/templates/lecture-notes-template.md`. Add every new n
 
 ### Experiments
 
-- Use notebooks for exploration and model prototyping.
-- Move reusable logic into `src/comp70049/`.
-- Keep experiment parameters in `configs/` instead of hard-coding them.
+- Keep each assignment workflow self-contained in its section notebook, including downloading, cleaning, modelling, evaluation, and exporting results.
+- Define the runtime parameters near the top of each notebook so a Colab user can reproduce or change an experiment in one place.
+- Treat `configs/` as reference copies of parameters used during earlier runs; the notebooks do not depend on those files.
 - Save metrics, tables, and report-ready charts under `reports/section_NN/`.
 - Record important dataset and model choices in the relevant assignment or research document.
 

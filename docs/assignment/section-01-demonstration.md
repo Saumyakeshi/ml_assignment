@@ -58,35 +58,13 @@ Both models use the same held-out test set and a fixed threshold of 0.5. The run
 The complete narrative and executable workflow is available in the
 [Section 1 Colab notebook](../../notebooks/01_phishing/section-01-email-security.ipynb).
 
-When using the VS Code Colab extension, connect to a hosted runtime and run the
-notebook from the top. Its setup cell automatically clones the repository into
-`/content/ml_assignment` when it is not already present. There is no need to
-upload `pyproject.toml`, `configs`, `scripts`, or `src` manually. The hosted
-runtime still cannot directly access the local Windows path.
+Open the notebook locally or through the VS Code Colab extension and run it from
+top to bottom. It installs its dependencies, defines every helper function, and
+downloads the corpus directly; it does not clone the repository or import local
+source modules.
 
-From the repository root:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -e ".[deep,dev]"
-python scripts/download_spamassassin.py
-python scripts/run_section_01.py
-pytest
-```
-
-For a fast classic-model-only check:
-
-```powershell
-python scripts/run_section_01.py --skip-lstm
-```
-
-For a one-epoch LSTM smoke test:
-
-```powershell
-python scripts/run_section_01.py --epochs 1
-```
+Set `LSTM_EPOCHS_OVERRIDE = 1` in the configuration cell for a quick pipeline
+check. Leave it as `None` to use the configured full training schedule.
 
 ## Outputs
 

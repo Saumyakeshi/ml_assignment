@@ -50,9 +50,6 @@ These limitations must be stated in the final report.
 
 ## Reproduction
 
-```powershell
-python scripts/download_nsl_kdd.py
-python scripts/run_section_02.py --skip-cnn
-python scripts/run_section_02.py
-```
-
+Open the self-contained [Section 2 notebook](../../notebooks/02_intrusion_detection/section-02-intrusion-detection.ipynb)
+and run it from top to bottom. It includes the validated download, preprocessing,
+both models, evaluation, and result export.

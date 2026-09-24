@@ -27,28 +27,15 @@ See [the NSL-KDD dataset record](../research/nsl-kdd-dataset.md) for provenance,
 
 ## Setup
 
-From the repository root:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -e ".[deep,dev]"
-```
-
-In Google Colab, upload `pyproject.toml`, `configs/`, `scripts/`, and `src/` together under `/content`, then run:
-
-```python
-%pip install -q -e ".[deep]"
-```
+Open the [Section 2 notebook](../../notebooks/02_intrusion_detection/section-02-intrusion-detection.ipynb)
+locally or through the VS Code Colab extension and run it from top to bottom.
+The notebook installs its dependencies and defines every required function
+inline. It does not need a repository clone, package installation, or uploaded
+source files.
 
 ## Download and validate the data
 
-```powershell
-python scripts/download_nsl_kdd.py
-```
-
-The downloader checks:
+The notebook's data cell downloads the official train/test files and checks:
 
 - 125,973 training records;
 - 22,544 test records;
@@ -87,25 +74,11 @@ The Random Forest uses balanced subsample weights. The CNN uses square-root inve
 
 ## Run the models
 
-Run only the classical baseline:
-
-```powershell
-python scripts/run_section_02.py --skip-cnn
-```
-
-Run a one-epoch CNN smoke test:
-
-```powershell
-python scripts/run_section_02.py --epochs 1
-```
-
-Run the configured full experiment:
-
-```powershell
-python scripts/run_section_02.py
-```
-
-The full configuration requests eight CNN epochs with early stopping. The saved one-epoch result is a pipeline verification result, not the final deep-learning experiment.
+Run the notebook cells through the Random Forest section for the classical
+baseline only. Set `CNN_EPOCHS_OVERRIDE = 1` in the configuration cell for a
+quick CNN pipeline check, or leave it as `None` for the configured eight-epoch
+experiment with early stopping. A one-epoch result is a pipeline check, not the
+final deep-learning experiment.
 
 ## Current verified smoke results
 

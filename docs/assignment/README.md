@@ -4,6 +4,7 @@ The authoritative assignment files are stored in this directory:
 
 - [Assignment information](./ASSIGNMENT_INFORMATION.md)
 - [Original assignment brief](./COMP70049-Assignment.pdf)
+- [Assignment guidance extracted from lectures](./LECTURE_ASSIGNMENT_GUIDANCE.md)
 - [Section 1 demonstration](./section-01-demonstration.md)
 
 Use this directory for supporting planning documents such as:

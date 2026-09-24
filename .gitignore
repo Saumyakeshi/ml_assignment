@@ -56,4 +56,5 @@ models/*
 *.log
 tmp/
 temp/
+colab_results/
 

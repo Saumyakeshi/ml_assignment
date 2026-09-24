@@ -10,6 +10,8 @@ The authoritative assignment files are stored in this directory:
 - [Section 2 Colab notebook](../../notebooks/02_intrusion_detection/section-02-intrusion-detection.ipynb)
 - [Section 3 demonstration](./section-03-demonstration.md)
 - [Section 3 Colab notebook](../../notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb)
+- [Section 4 demonstration](./section-04-demonstration.md)
+- [Section 4 Colab notebook](../../notebooks/04_ransomware/section-04-ransomware-detection.ipynb)
 
 Use this directory for supporting planning documents such as:
 

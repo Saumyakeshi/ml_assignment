@@ -1,0 +1,9 @@
+{
+  "records_after_deduplication": 630,
+  "train_records": 440,
+  "validation_records": 95,
+  "test_records": 95,
+  "unique_goodware": 591,
+  "unique_ransomware": 39,
+  "lstm_epochs": 15
+}

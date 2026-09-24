@@ -13,6 +13,8 @@ This repository contains lecture-derived notes, assignment planning, datasets, s
 - [Section 2 Colab notebook](./notebooks/02_intrusion_detection/section-02-intrusion-detection.ipynb)
 - [Section 3 demonstration](./docs/assignment/section-03-demonstration.md)
 - [Section 3 Colab notebook](./notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb)
+- [Section 4 demonstration](./docs/assignment/section-04-demonstration.md)
+- [Section 4 Colab notebook](./notebooks/04_ransomware/section-04-ransomware-detection.ipynb)
 - [Documentation index](./docs/README.md)
 - [Lecture notes index](./docs/lectures/README.md)
 - [Lecture note template](./docs/templates/lecture-notes-template.md)
@@ -30,6 +32,12 @@ The Section 2 demonstration performs five-class intrusion detection on NSL-KDD, 
 ## Section 3 quick start
 
 The Section 3 demonstration cleans an unmodified CSE-CIC-IDS2018 daily flow CSV and compares a normal-only Isolation Forest with an Autoencoder. See the [Section 3 walkthrough](./docs/assignment/section-03-demonstration.md).
+
+## Section 4 quick start
+
+The Section 4 demonstration detects ransomware from ordered Windows API-call
+sequences, comparing a class-balanced linear SVM with a class-weighted LSTM. See
+the [Section 4 walkthrough](./docs/assignment/section-04-demonstration.md).
 
 ## Repository structure
 
@@ -55,7 +63,8 @@ The Section 3 demonstration cleans an unmodified CSE-CIC-IDS2018 daily flow CSV 
 |   |-- drafts/                     # Report source and working drafts
 |   |-- section_01/                 # Section 1 metrics, tables, and figures
 |   |-- section_02/                 # Section 2 metrics, tables, and figures
-|   `-- section_03/                 # Section 3 metrics, tables, and figures
+|   |-- section_03/                 # Section 3 metrics, tables, and figures
+|   `-- section_04/                 # Section 4 metrics, tables, and figures
 ```
 
 ## Working conventions

@@ -55,6 +55,9 @@ Both models use the same held-out test set and a fixed threshold of 0.5. The run
 
 ## Run instructions
 
+The complete narrative and executable workflow is available in the
+[Section 1 Colab notebook](../../notebooks/01_phishing/section-01-email-security.ipynb).
+
 From the repository root:
 
 ```powershell
@@ -97,4 +100,3 @@ python scripts/run_section_01.py --epochs 1
 - Discuss false negatives as malicious or unwanted messages that would reach the user.
 - Compare the models on identical test records.
 - Do not claim that a higher score proves one model is universally superior; consider runtime, explainability, data requirements, and corpus age.
-

@@ -53,6 +53,7 @@ def main() -> None:
     np.random.seed(seed)
 
     frame = load_spamassassin_corpus(_resolve(config["data_dir"]))
+    print(f"Loaded {len(frame)} deduplicated email messages.")
     splits = stratified_splits(
         frame,
         test_fraction=float(config["test_fraction"]),
@@ -64,6 +65,7 @@ def main() -> None:
     results_dir = _resolve(config["results_dir"])
     models_dir = _resolve(config["models_dir"])
     classic_model = train_classic_model(splits.train, config["classic"])
+    print("Trained TF-IDF Logistic Regression baseline.")
     classic_metrics = evaluate_classic_model(
         classic_model,
         splits.test,
@@ -86,6 +88,7 @@ def main() -> None:
     ]
 
     if not arguments.skip_lstm:
+        print("Training LSTM model.")
         lstm_metrics = train_and_evaluate_lstm(
             splits.train,
             splits.validation,
@@ -123,6 +126,9 @@ def main() -> None:
             "spam": int((frame["label"] == 1).sum()),
         },
         "models_run": comparison["model"].tolist(),
+        "lstm_epochs_requested": (
+            None if arguments.skip_lstm else int(config["lstm"]["epochs"])
+        ),
     }
     (results_dir / "run-summary.json").write_text(
         json.dumps(summary, indent=2),
@@ -134,4 +140,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

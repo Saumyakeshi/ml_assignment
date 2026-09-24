@@ -7,6 +7,7 @@ This repository contains lecture-derived notes, assignment planning, datasets, e
 - [Assignment information](./docs/assignment/ASSIGNMENT_INFORMATION.md)
 - [Original assignment brief](./docs/assignment/COMP70049-Assignment.pdf)
 - [Section 1 demonstration](./docs/assignment/section-01-demonstration.md)
+- [Section 1 Colab notebook](./notebooks/01_phishing/section-01-email-security.ipynb)
 - [Documentation index](./docs/README.md)
 - [Lecture notes index](./docs/lectures/README.md)
 - [Lecture note template](./docs/templates/lecture-notes-template.md)

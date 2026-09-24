@@ -25,13 +25,14 @@ PAD_TOKEN = "<PAD>"
 UNKNOWN_TOKEN = "<UNK>"
 
 
-@dataclass(frozen=True)
+@dataclass
 class Vocabulary:
     tokens: list[str]
 
-    @property
-    def token_to_index(self) -> dict[str, int]:
-        return {token: index for index, token in enumerate(self.tokens)}
+    def __post_init__(self) -> None:
+        self.token_to_index = {
+            token: index for index, token in enumerate(self.tokens)
+        }
 
     @classmethod
     def build(cls, texts: Iterable[str], max_size: int) -> "Vocabulary":
@@ -42,13 +43,15 @@ class Vocabulary:
         return cls(tokens=[PAD_TOKEN, UNKNOWN_TOKEN, *most_common])
 
     def encode(self, text: str, max_length: int) -> tuple[list[int], int]:
-        mapping = self.token_to_index
-        unknown = mapping[UNKNOWN_TOKEN]
-        encoded = [mapping.get(token, unknown) for token in tokenize(text)[:max_length]]
+        unknown = self.token_to_index[UNKNOWN_TOKEN]
+        encoded = [
+            self.token_to_index.get(token, unknown)
+            for token in tokenize(text)[:max_length]
+        ]
         if not encoded:
             encoded = [unknown]
         length = len(encoded)
-        encoded.extend([mapping[PAD_TOKEN]] * (max_length - length))
+        encoded.extend([self.token_to_index[PAD_TOKEN]] * (max_length - length))
         return encoded, length
 
 
@@ -239,6 +242,11 @@ def train_and_evaluate_lstm(
                 "validation_f1": validation_f1,
             }
         )
+        print(
+            f"LSTM epoch {epoch}: "
+            f"loss={history[-1]['training_loss']:.4f}, "
+            f"validation_f1={validation_f1:.4f}"
+        )
 
         if validation_f1 > best_f1:
             best_f1 = validation_f1
@@ -283,4 +291,3 @@ def train_and_evaluate_lstm(
     )
     _save_training_plot(history, results_dir / "figures" / "lstm-training-history.png")
     return metrics
-

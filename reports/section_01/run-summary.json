@@ -1,0 +1,15 @@
+{
+  "records_after_deduplication": 2953,
+  "train_records": 2067,
+  "validation_records": 443,
+  "test_records": 443,
+  "class_counts": {
+    "ham": 2472,
+    "spam": 481
+  },
+  "models_run": [
+    "TF-IDF Logistic Regression",
+    "LSTM"
+  ],
+  "lstm_epochs_requested": 1
+}

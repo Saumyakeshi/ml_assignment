@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from comp70049.phishing.data import extract_email_text, stratified_splits
 from comp70049.phishing.preprocessing import normalize_text, tokenize
@@ -53,7 +54,7 @@ def test_stratified_splits_are_disjoint_and_complete() -> None:
     assert train_hashes.isdisjoint(validation_hashes)
     assert train_hashes.isdisjoint(test_hashes)
     assert validation_hashes.isdisjoint(test_hashes)
-    assert splits.train["label"].mean() == 0.2
-    assert splits.validation["label"].mean() == 0.2
-    assert splits.test["label"].mean() == 0.2
-
+    # Integer split sizes can move the class ratio by one observation.
+    assert splits.train["label"].mean() == pytest.approx(0.2, abs=0.02)
+    assert splits.validation["label"].mean() == pytest.approx(0.2, abs=0.02)
+    assert splits.test["label"].mean() == pytest.approx(0.2, abs=0.02)

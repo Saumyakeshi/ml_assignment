@@ -7,6 +7,8 @@ This repository contains lecture-derived notes, assignment planning, datasets, s
 - [Assignment information](./docs/assignment/ASSIGNMENT_INFORMATION.md)
 - [Original assignment brief](./docs/assignment/COMP70049-Assignment.pdf)
 - [Assignment guidance extracted from lectures](./docs/assignment/LECTURE_ASSIGNMENT_GUIDANCE.md)
+- [Lecture–notebook alignment review](./docs/assignment/LECTURE_NOTEBOOK_ALIGNMENT.md)
+- [4,000-word expanded implementation report](./reports/drafts/assignment-report-4000-words.md) — exceeds the brief's 3,000-word limit; saved results require run reconciliation.
 - [Section 1 demonstration](./docs/assignment/section-01-demonstration.md)
 - [Section 1 Colab notebook](./notebooks/01_phishing/section-01-email-security.ipynb)
 - [Section 2 demonstration](./docs/assignment/section-02-demonstration.md)

@@ -5,6 +5,8 @@ The authoritative assignment files are stored in this directory:
 - [Assignment information](./ASSIGNMENT_INFORMATION.md)
 - [Original assignment brief](./COMP70049-Assignment.pdf)
 - [Assignment guidance extracted from lectures](./LECTURE_ASSIGNMENT_GUIDANCE.md)
+- [Lecture–notebook alignment review](./LECTURE_NOTEBOOK_ALIGNMENT.md)
+- [4,000-word expanded implementation report](../../reports/drafts/assignment-report-4000-words.md) — longer than the formal submission limit; see its evidence/provenance note.
 - [Section 1 demonstration](./section-01-demonstration.md)
 - [Section 2 demonstration](./section-02-demonstration.md)
 - [Section 2 Colab notebook](../../notebooks/02_intrusion_detection/section-02-intrusion-detection.ipynb)

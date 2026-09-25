@@ -1,0 +1,11 @@
+{
+  "train_validation": 0,
+  "train_test": 0,
+  "validation_test": 0,
+  "tfidf_stopword_count": 297,
+  "protected_negation_terms": [
+    "no",
+    "nor",
+    "not"
+  ]
+}

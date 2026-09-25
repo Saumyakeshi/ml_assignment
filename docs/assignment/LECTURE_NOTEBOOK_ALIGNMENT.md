@@ -6,7 +6,7 @@ Updated 24 September 2026. Scope: all ten available lecture-note files, the four
 
 The revised notebooks follow the taught workflow and address the earlier code-level alignment gaps. They compare an appropriate classical model with a neural model, keep learned preprocessing inside the training boundary, use validation data for checkpoint or threshold selection, report security-relevant metrics, and retain run-provenance information.
 
-The notebooks are now **source-complete but not result-complete**. Their stale stored outputs were cleared because the revised preprocessing, conflict policy and threshold policies change the experiments. Existing files under `reports/section_NN` are legacy results and must not be attributed to the revised code. A fresh top-to-bottom run of every notebook is required before final submission, followed by export of all artifacts carrying the same `run_id`.
+The notebooks are now **source-complete but not result-complete**. Their stale stored outputs were cleared because the revised preprocessing, conflict policy and threshold policies change the experiments. Existing files under `reports/section_NN` are legacy results and must not be attributed to the revised code. A fresh top-to-bottom run of every notebook is required before final submission, followed by export of each section's matching artifacts as one set.
 
 The formal [assignment brief](ASSIGNMENT_INFORMATION.md) limits the report to **3,000 words**. The expanded 4,000-word report remains a drafting aid and must be shortened or supported by an authoritative amendment before submission.
 
@@ -40,7 +40,7 @@ Remaining limitations:
 - SpamAssassin supplies spam/ham labels, not phishing/legitimate labels. Every result claim must retain that distinction.
 - Replacing addresses and URLs with markers removes their identity and structure. This is a deliberate generalisation trade-off rather than a claim that those details are unimportant.
 - Exact normalized-text separation does not establish independence between near-duplicate campaigns.
-- The revised experiment has not yet been executed, so no current result may be quoted until new artifacts share its `run_id`.
+- The revised experiment has not yet been executed, so no current result may be quoted until a fresh, internally consistent artifact set is exported.
 
 ### 2. Intrusion detection
 
@@ -85,14 +85,14 @@ Remaining limitations:
 
 ## Result provenance and rerun requirement
 
-The revised notebooks generate a UTC `run_id` and store it with model metrics and artifacts. They also record dataset hashes, seeds, package versions, platform details, split membership, numerical training histories, chosen epochs and selected features. Colab exports now include processed profiles/manifests as well as reports and models.
+The revised notebooks record dataset hashes, seeds, package versions, platform details, split membership, numerical training histories, chosen epochs and selected features. Colab exports include processed profiles/manifests as well as reports and models. Each section's exported files must come from one uninterrupted top-to-bottom execution.
 
 All notebook outputs were intentionally cleared. The existing JSON, CSV, figures and model files elsewhere in the repository predate the revised pipelines. In particular, they reflect the previous Section 1 preprocessing, Section 3 feature boundary/threshold policy, and Section 4 conflict handling. They are useful only as legacy records and must not be mixed with a new training history or presented as reproduction of the revised notebooks.
 
 Before submission:
 
 1. Run each notebook from a fresh kernel, top to bottom, without reusing variables from an older session.
-2. Confirm that every artifact for a section carries the same `run_id` and dataset hash.
+2. Confirm that every artifact for a section was produced by the same execution and records the expected dataset hash.
 3. Replace the legacy `reports/section_NN` contents with the matching fresh export as one atomic set.
 4. Reconcile the written report against the new metrics, confusion counts, thresholds, chosen epochs and limitations.
 5. Shorten the final report to the formal 3,000-word limit unless an authoritative amendment is obtained.

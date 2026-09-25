@@ -1,0 +1,11 @@
+{
+  "source_messages": 3000,
+  "exact_conflicting_texts_excluded": 0,
+  "normalized_conflicting_texts_excluded": 0,
+  "empty_normalized_messages_excluded": 0,
+  "records_after_normalized_deduplication": 2947,
+  "replacement_characters": 3701,
+  "html_fallback_messages": 211,
+  "unknown_charset_fallbacks": 3,
+  "messages_without_text_body": 1
+}

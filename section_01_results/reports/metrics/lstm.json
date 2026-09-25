@@ -1,0 +1,51 @@
+{
+  "threshold": 0.9771909713745117,
+  "validation_false_alert_budget": 0.01,
+  "accuracy": 0.9413092550790068,
+  "precision": 1.0,
+  "recall": 0.6388888888888888,
+  "f1": 0.7796610169491526,
+  "roc_auc": 0.9728212039532794,
+  "average_precision": 0.9443583334345251,
+  "confusion_matrix": [
+    [
+      371,
+      0
+    ],
+    [
+      26,
+      46
+    ]
+  ],
+  "classification_report": {
+    "ham": {
+      "precision": 0.9345088161209067,
+      "recall": 1.0,
+      "f1-score": 0.9661458333333334,
+      "support": 371.0
+    },
+    "spam": {
+      "precision": 1.0,
+      "recall": 0.6388888888888888,
+      "f1-score": 0.7796610169491526,
+      "support": 72.0
+    },
+    "accuracy": 0.9413092550790068,
+    "macro avg": {
+      "precision": 0.9672544080604534,
+      "recall": 0.8194444444444444,
+      "f1-score": 0.872903425141243,
+      "support": 443.0
+    },
+    "weighted avg": {
+      "precision": 0.9451529814466284,
+      "recall": 0.9413092550790068,
+      "f1-score": 0.9358367886839857,
+      "support": 443.0
+    }
+  },
+  "best_validation_loss": 0.23924370251629687,
+  "chosen_epoch": 3,
+  "epochs": 6,
+  "device": "cpu"
+}

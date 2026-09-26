@@ -4,89 +4,73 @@
 
 This experiment implements the Section 3 requirements with:
 
-- **Dataset:** unclean CSE-CIC-IDS2018 flow data from Thursday 1 March 2018;
+- **Dataset:** UNSW-NB15 network-flow data;
 - **Classical model:** Isolation Forest;
-- **Deep-learning model:** dense Autoencoder;
+- **Deep-learning model:** denoising Autoencoder;
 - **Training:** benign traffic only;
-- **Threshold selection:** maximum F1 on labelled validation scores;
-- **Required evaluation:** true-positive rate, false-positive rate, and precision-recall curves.
+- **Threshold selection:** minimum validation false-positive rate while detecting at least 60% of validation attacks; and
+- **Evaluation:** TPR, FPR, precision-recall curves, ROC curves, confusion matrices, F1, average precision, and ROC AUC.
 
-The implementation also reports precision, F1, average precision, ROC AUC, confusion matrices, score distributions, and Autoencoder training loss.
+## Dataset and download
 
-## Data download
+UNSW-NB15 combines normal activity with nine attack families: Analysis, Backdoor, DoS, Exploits, Fuzzers, Generic, Reconnaissance, Shellcode, and Worms. The notebook downloads the published 175,341-record development file and 82,332-record test file from public mirrors, records SHA-256 hashes, and links the official UNSW dataset page in the run summary.
 
-The notebook's data cell downloads one official 103 MiB CSV from the public
-CSE-CIC-IDS2018 AWS bucket, verifies its byte size and SHA-256 checksum, and
-saves it under the Git-ignored `data/raw/cic-ids2018/` directory.
+The university's current SharePoint download requires authentication, so the notebook uses two public download mirrors with automatic fallback. The source release remains the UNSW-NB15 standard training and testing CSV files.
 
-## Cleaning performed
+## Cleaning and preprocessing
 
-The initial audit proves that the selected file is unclean. The reproducible pipeline:
+The pipeline:
 
-1. strips leading/trailing whitespace from column names and labels;
-2. removes 25 embedded repeated CSV headers;
-3. removes the 73 remaining exact duplicate records (the raw audit reports 97 duplicates because 24 repeated headers duplicate one another);
-4. replaces 4,000 positive/negative infinite values with missing values;
-5. coerces any malformed numeric values to missing values;
-6. derives `hour` and `day_of_week` while reporting invalid timestamps;
-7. drops features only when their missing fraction exceeds the configured limit;
-8. median-imputes the remaining missing values;
-9. removes zero-variance transformed features; and
-10. standardizes numerical features using statistics learned from benign training data only.
+1. normalizes column names, labels, and attack-family names;
+2. converts numerical fields safely and replaces infinite values with missing values;
+3. removes exact duplicate feature records inside each partition;
+4. removes exact test representations also present in development data;
+5. fits median imputation only on benign training records;
+6. applies a signed `log1p` transform to reduce extreme numerical skew;
+7. applies robust scaling using the 5th and 95th percentiles;
+8. one-hot encodes protocol, service, and connection state; and
+9. removes zero-variance transformed features.
 
-Statistical outliers are retained because deleting them could remove the attacks that anomaly detection is intended to find.
+Cleaning removed 74,301 duplicate development records, 28,386 duplicate test records, and 1,302 overlapping test representations. The model-ready experiment contained 58 transformed features.
 
 ## Leakage-safe anomaly experiment
 
-The split differs from ordinary supervised classification:
+- **Training:** 15,000 benign development records; attack labels are not used for model fitting.
+- **Validation:** 12,000 benign and 12,000 attack records; labels tune hyperparameters and thresholds.
+- **Test:** 52,644 records from the held-out standard test file after cleaning, containing 33,662 benign and 18,982 attack records.
 
-- **Training:** benign flows only; labels are not used for model fitting.
-- **Validation:** benign plus infiltration flows; labels select each score threshold.
-- **Test:** held-out benign plus infiltration flows; used once for final evaluation.
-
-The default sample produces 72,000 training, 33,000 validation, and 33,000 test
-records. Runtime parameters are defined near the top of the notebook; the file
-[`configs/section_03.json`](../../configs/section_03.json) remains only as a
-reference copy of the earlier configuration.
+All preprocessing is fitted on benign training data. The test partition is used only after model and threshold selection.
 
 ## Models
 
 ### Isolation Forest
 
-Isolation Forest uses random partitioning trees. Sparse observations generally require fewer splits and receive more anomalous scores. The implementation uses 200 trees with up to 10,000 samples per tree and does not use the model's built-in contamination threshold; it selects a threshold on validation data instead.
+Six settings were compared on validation data. Each used 300 trees, while `max_samples` and `max_features` varied. Average precision was the primary selection measure because the classes are imbalanced. The selected model used all 15,000 benign training records per tree and all transformed features.
 
-### Autoencoder
+### Denoising Autoencoder
 
-The Autoencoder learns to reconstruct standardized benign traffic through a compressed latent layer. Mean squared reconstruction error is the anomaly score. It uses a `64 -> 32 -> 12 -> 32 -> 64` hidden/latent structure around the input/output layers, dropout, Adam optimization, and retains the epoch with the lowest benign validation reconstruction loss.
+The Autoencoder uses a `128 -> 64 -> 16 -> 64 -> 128` hidden structure around the input and output layers. Small Gaussian noise is added during training, encouraging the network to learn stable benign patterns instead of copying individual records. Layer normalization, dropout, AdamW, gradient clipping, Smooth L1 loss, and benign-validation early stopping improve stability. Feature-level reconstruction errors are normalized using benign validation errors before the final anomaly score is calculated.
+
+## Validated results
+
+| Model | Accuracy | TPR | FPR | Precision | F1 | Average precision | ROC AUC |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Isolation Forest | 0.729 | 0.615 | 0.206 | 0.627 | 0.621 | 0.672 | 0.763 |
+| Denoising Autoencoder | 0.805 | 0.709 | 0.142 | 0.739 | 0.724 | 0.796 | 0.876 |
+
+Both models meet the requirement to categorize more than half of attacks as attacks. Isolation Forest detects 61.5% and the Autoencoder detects 70.9%. The Autoencoder remains stronger, with ROC AUC of 0.876 and average precision of 0.796. Increasing recall requires more alerts: test FPR is 20.6% for Isolation Forest and 14.2% for the Autoencoder.
+
+Per-attack recall is uneven. The Autoencoder detects all Analysis attacks and approximately 94.9% of Generic, 85.9% of Exploits, 83.7% of Worms, and 77.7% of DoS records. It remains weak on Shellcode, Fuzzers, and Reconnaissance, so the overall score must not be interpreted as equal protection against every threat.
 
 ## Run the notebook
 
-Open [`notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb`](../../notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb)
-locally or through the VS Code Colab extension and run it from top to bottom.
-It installs dependencies, downloads and cleans the data, defines the models,
-and exports the results without cloning the repository or importing local
-source modules.
+Open [`notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb`](../../notebooks/03_anomaly_detection/section-03-anomaly-detection.ipynb) locally or in Colab and run it from top to bottom. It downloads and validates the data, performs cleaning, tunes and evaluates both models, saves model artifacts, and creates `section_03_results.zip` in Colab.
 
-Set `AUTOENCODER_EPOCHS = 1` near the top of the notebook for a quick pipeline
-check, or use the configured value of 12 for the full training schedule.
+## Interpretation questions
 
-## Full configured result
-
-The checked-in artifacts come from the configured 12-epoch Autoencoder run:
-
-| Model | TPR | FPR | Precision | F1 | Average precision | ROC AUC |
-|---|---:|---:|---:|---:|---:|---:|
-| Isolation Forest | 0.956 | 0.916 | 0.281 | 0.435 | 0.247 | 0.461 |
-| Autoencoder (12 epochs) | 0.981 | 0.875 | 0.296 | 0.455 | 0.275 | 0.518 |
-
-These numbers are deliberately not presented as a successful detector. Maximizing validation F1 selected very permissive thresholds because the scores poorly separate infiltration from benign traffic. The models catch most attacks only by creating an operationally unacceptable number of false alerts. The Autoencoder reduced FPR relative to its one-epoch smoke run, but the completed training still does not establish that this representation reliably separates stealthy infiltration flows.
-
-## Interpretation questions for the final report
-
-1. Why can high TPR be misleading when FPR is also extremely high?
-2. Do anomaly scores rank infiltration flows above benign flows, as shown by average precision and ROC AUC?
-3. How does changing the validation threshold trade missed attacks against analyst workload?
-4. Why must attacks remain absent from model-fitting data in this experimental design?
-5. Which raw-data problems required cleaning, and why were statistical outliers retained?
-6. Would chronological or cross-day testing provide stronger evidence than a random split?
-7. What CIC-IDS2018 artefacts and labelling limitations prevent deployment claims?
+1. Why is average precision important when attack prevalence is unequal?
+2. Why does targeting higher attack recall increase the number of false alerts?
+3. Why must attacks remain absent from model-fitting data in an unsupervised experiment?
+4. Which attack families are detected reliably, and which remain difficult?
+5. Why do duplicate and overlapping representations create misleading evaluation results?
+6. What limitations prevent deployment claims from a controlled benchmark dataset?

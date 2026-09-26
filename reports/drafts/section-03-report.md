@@ -2,35 +2,47 @@
 
 ## Aim
 
-The experiment investigated whether models trained only on benign network flows could identify previously unseen abnormal behaviour. Isolation Forest was compared with a dense Autoencoder using the CSE-CIC-IDS2018 flow dataset for 1 March 2018.
+This experiment investigated whether unsupervised models trained only on benign network flows could identify unusual behaviour representing previously unseen cyber threats. A classical Isolation Forest was compared with a denoising Autoencoder using the UNSW-NB15 dataset.
 
 ## Dataset and cleaning
 
-The selected CSV contained 331,125 records and 80 source columns. It was intentionally used before model-ready cleaning. Profiling identified 97 raw duplicate rows, 1,834 native missing values, 4,000 infinite rate values, and 25 embedded repeated headers. Column and label whitespace was normalized; the embedded headers and 73 remaining duplicates were removed; infinite and malformed numeric values became missing values; timestamp features were derived; high-missingness fields could be removed; and remaining missing values were median-imputed. Twenty-four repeated headers were duplicates of one another, explaining the difference between the raw and post-header duplicate counts. Potential statistical outliers were retained because they may be the security-relevant anomalies.
+UNSW-NB15 contains normal traffic and nine attack families: Analysis, Backdoor, DoS, Exploits, Fuzzers, Generic, Reconnaissance, Shellcode, and Worms. The published development and test CSV files originally contained 175,341 and 82,332 records respectively, with 45 columns each.
 
-After cleaning, 331,027 usable records remained: 237,987 benign and 93,040 infiltration records. To keep execution practical, the configured experiment sampled 120,000 benign and 18,000 infiltration records.
+The pipeline removed exact duplicates using feature values rather than row identifiers. This removed 74,301 development records and 28,386 test records. A further 1,302 test records were removed because their feature representations also appeared in development data. The cleaned partitions contained 101,040 development records and 52,644 test records.
+
+Numerical fields were median-imputed, transformed with signed `log1p`, and robustly scaled. Protocol, service, and connection state were one-hot encoded. Zero-variance transformed features were removed, leaving 58 model features. Every preprocessing operation was fitted using benign training records only.
 
 ## Experimental design
 
-Only benign flows were included in the 72,000-record training partition. The validation and test partitions each contained 24,000 benign and 9,000 infiltration records. Labels were used only to select model-specific validation thresholds and calculate final metrics. Imputation, variance filtering, and standardization were fitted on the normal training partition to prevent leakage.
+The training partition contained 15,000 benign records and no attacks. Validation contained 12,000 benign and 12,000 attack records. It was used to select model settings and choose the lowest-false-positive threshold that detected at least 60% of validation attacks. The cleaned official test partition contained 33,662 benign and 18,982 attack records and was used only for final evaluation.
+
+This design preserves the unsupervised anomaly-detection objective: neither model receives attack examples during parameter fitting. Labels are used only for validation decisions and final evaluation.
 
 ## Models
 
-Isolation Forest used 200 randomized isolation trees and up to 10,000 observations per tree. Its anomaly score was the negative tree-ensemble normality score. The Autoencoder compressed the traffic features into a 12-unit latent representation and used mean squared reconstruction error as its anomaly score. Both thresholds maximized F1 on the labelled validation partition.
+Isolation Forest used 300 randomized trees. Six combinations of training sample size and feature proportion were compared using validation average precision, with ROC AUC as a secondary measure. The selected configuration used all 15,000 benign training records and all transformed features.
+
+The denoising Autoencoder used a `128 -> 64 -> 16 -> 64 -> 128` hidden structure. It reconstructed clean benign records from slightly noisy inputs. Layer normalization, dropout, AdamW optimization, gradient clipping, Smooth L1 loss, and benign-validation monitoring were used for stable training. It trained for 30 epochs and retained the epoch with the lowest benign validation loss. Reconstruction error was normalized per feature before calculating each record's anomaly score.
 
 ## Results
 
-| Model | TPR | FPR | Precision | F1 | Average precision | ROC AUC |
-|---|---:|---:|---:|---:|---:|---:|
-| Isolation Forest | 0.956 | 0.916 | 0.281 | 0.435 | 0.247 | 0.461 |
-| Autoencoder (12 epochs) | 0.997 | 0.888 | 0.296 | 0.457 | 0.277 | 0.517 |
+| Model | Accuracy | TPR | FPR | Precision | F1 | Average precision | ROC AUC |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Isolation Forest | 0.729 | 0.615 | 0.206 | 0.627 | 0.621 | 0.672 | 0.763 |
+| Denoising Autoencoder | 0.805 | 0.709 | 0.142 | 0.739 | 0.724 | 0.796 | 0.876 |
 
-## Discussion
+The Autoencoder performed best across every ranking and threshold-dependent measure. Its ROC AUC of 0.876 indicates that attack records generally receive higher anomaly scores than benign records. Average precision of 0.796 confirms useful performance under the observed class distribution. At the selected threshold, the model detected 13,465 of 18,982 attacks while producing 4,766 false alerts from 33,662 benign records.
 
-The high TPR values initially appear encouraging, but they result from thresholds that classify nearly all traffic as anomalous. FPR above 90% would overwhelm an analyst and makes both detectors operationally unusable in their current form. Average precision and ROC AUC near or below random ranking show that the anomaly scores do not meaningfully separate the labelled infiltration flows from benign flows.
+The Isolation Forest also produced a useful ranking and now exceeds the required 50% attack recall. It detected 11,666 attacks and missed 7,316 at the selected threshold.
 
-This negative result is informative. Infiltration flows may be deliberately similar to legitimate traffic, while the selected flow-level features and simulated testbed artefacts may not provide a stable definition of normality. The validation-selected threshold behaved correctly according to its objective, but maximizing F1 at this anomaly prevalence did not impose a usable false-alert constraint. The final experiment should report threshold trade-offs rather than relying on TPR alone.
+## Discussion and cybersecurity implications
 
-## Limitations and next experiment
+The Autoencoder's stronger result suggests that learning a nonlinear benign reconstruction boundary is more suitable than random isolation for these mixed protocol and traffic features. Denoising discourages simple copying, while feature-error normalization prevents naturally difficult fields from dominating the score.
 
-The completed 12-epoch Autoencoder run reduced FPR compared with its one-epoch implementation check but remained operationally unacceptable. Additional experiments should examine a threshold constrained to a target validation FPR, a chronological or cross-day test, and sensitivity to the selected traffic features. Results cannot be interpreted as evidence of deployment readiness because CIC-IDS2018 is a controlled 2018 environment with known artefact and labelling concerns.
+The recall-focused policy succeeds in detecting more than half of attacks, but it increases false alerts. Test FPR is 20.6% for Isolation Forest and 14.2% for the Autoencoder. In practice, the recall target should be chosen according to the cost of missed attacks and the investigation capacity of the security team.
+
+Attack-family recall also varied substantially. The Autoencoder detected all Analysis records and most Generic, Worms, Exploits, and DoS records. Recall remained low for Shellcode, Fuzzers, and Reconnaissance. An operational system should therefore retain attack-family analysis rather than relying only on one overall metric.
+
+## Key takeaways and potential improvements
+
+UNSW-NB15 provided a stronger anomaly-detection benchmark than the previous infiltration-only daily file. The Autoencoder was the better model, but neither result demonstrates deployment readiness. Future work should evaluate repeated seeds, calibrate thresholds on more recent benign traffic, test temporally ordered data, investigate weak attack families, and examine whether a smaller selected feature set improves classical anomaly detection. Benchmark data were generated in a controlled environment, so real-network validation remains necessary.

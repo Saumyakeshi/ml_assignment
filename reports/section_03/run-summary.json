@@ -1,7 +1,41 @@
 {
-  "train_records": 72000,
-  "validation_records": 33000,
-  "test_records": 33000,
-  "features": 67,
-  "autoencoder_epochs": 12
+  "created_utc": "2026-09-26T06:15:36.197659+00:00",
+  "seed": 42,
+  "dataset": "UNSW-NB15",
+  "dataset_source": "https://research.unsw.edu.au/projects/unsw-nb15-dataset",
+  "dataset_sha256": {
+    "UNSW_NB15_training-set.csv": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "UNSW_NB15_testing-set.csv": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559"
+  },
+  "data_quality": {
+    "development_file": "UNSW_NB15_training-set.csv",
+    "test_file": "UNSW_NB15_testing-set.csv",
+    "development_duplicates_removed": 74301,
+    "test_duplicates_removed": 28386,
+    "test_rows_overlapping_development_removed": 1302,
+    "development_records": 101040,
+    "test_records": 52644,
+    "development_missing_values": 0,
+    "test_missing_values": 0
+  },
+  "train_records": 15000,
+  "validation_records": 24000,
+  "test_records": 52644,
+  "features": 58,
+  "isolation_forest_parameters": {
+    "max_samples": 15000,
+    "max_features": 1.0
+  },
+  "autoencoder_chosen_epoch": 30,
+  "minimum_validation_recall": 0.6,
+  "python": "3.12.10",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "joblib": "1.6.0",
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.3",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.9.1",
+    "torch": "2.14.0"
+  }
 }

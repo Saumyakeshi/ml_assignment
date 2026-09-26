@@ -1,23 +1,32 @@
 {
-  "threshold": 0.013987396843731403,
-  "true_positive_rate": 0.9806666666666667,
-  "false_positive_rate": 0.875375,
-  "precision": 0.29582704876822524,
-  "recall": 0.9806666666666667,
-  "f1": 0.45453843182696024,
-  "average_precision": 0.27543958748099134,
-  "roc_auc": 0.5176493287037037,
+  "threshold": 1.66880202293396,
+  "threshold_selection": {
+    "policy": "minimum false-positive rate while meeting the validation recall target",
+    "minimum_validation_recall": 0.6,
+    "observed_validation_fpr": 0.07241666666666667,
+    "observed_validation_recall": 0.6,
+    "chosen_epoch": 30
+  },
+  "accuracy": 0.80466909809285,
+  "true_positive_rate": 0.7093562322199979,
+  "false_positive_rate": 0.14158398193809044,
+  "precision": 0.7385771488124623,
+  "recall": 0.7093562322199979,
+  "f1": 0.7236718351113858,
+  "average_precision": 0.796300983096488,
+  "roc_auc": 0.8760429524492341,
   "confusion_matrix": [
     [
-      2991,
-      21009
+      28896,
+      4766
     ],
     [
-      174,
-      8826
+      5517,
+      13465
     ]
   ],
-  "best_normal_validation_loss": 0.17146435379981995,
-  "epochs": 12,
+  "best_normal_validation_loss": 0.001344887426123023,
+  "chosen_epoch": 30,
+  "epochs_completed": 30,
   "device": "cpu"
 }

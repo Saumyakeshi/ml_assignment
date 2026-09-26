@@ -1,20 +1,31 @@
 {
-  "threshold": 0.31872220807957147,
-  "true_positive_rate": 0.9557777777777777,
-  "false_positive_rate": 0.915625,
-  "precision": 0.2813225627105341,
-  "recall": 0.9557777777777777,
-  "f1": 0.43469691992824117,
-  "average_precision": 0.24735438322142042,
-  "roc_auc": 0.46057264814814813,
+  "threshold": 0.4485611104544637,
+  "threshold_selection": {
+    "policy": "minimum false-positive rate while meeting the validation recall target",
+    "minimum_validation_recall": 0.6,
+    "observed_validation_fpr": 0.13366666666666666,
+    "observed_validation_recall": 0.6,
+    "selected_parameters": {
+      "max_samples": 15000,
+      "max_features": 1.0
+    }
+  },
+  "accuracy": 0.7292189043385761,
+  "true_positive_rate": 0.6145822358023391,
+  "false_positive_rate": 0.20613748440377874,
+  "precision": 0.6270357430798172,
+  "recall": 0.6145822358023391,
+  "f1": 0.6207465347061484,
+  "average_precision": 0.671925656577689,
+  "roc_auc": 0.762986103317778,
   "confusion_matrix": [
     [
-      2025,
-      21975
+      26723,
+      6939
     ],
     [
-      398,
-      8602
+      7316,
+      11666
     ]
   ]
 }

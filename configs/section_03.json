@@ -1,28 +1,29 @@
 {
   "seed": 42,
-  "data_file": "data/raw/cic-ids2018/Thursday-01-03-2018_TrafficForML_CICFlowMeter.csv",
+  "dataset": "UNSW-NB15",
+  "data_dir": "data/raw/unsw-nb15",
   "processed_dir": "data/processed/section_03",
   "models_dir": "models/section_03",
   "results_dir": "reports/section_03",
-  "max_benign_records": 120000,
-  "max_anomaly_records": 18000,
-  "benign_train_fraction": 0.6,
-  "benign_validation_fraction": 0.2,
-  "anomaly_validation_fraction": 0.5,
-  "maximum_missing_fraction": 0.4,
+  "max_train_normals": 15000,
+  "max_validation_per_class": 12000,
+  "minimum_validation_recall": 0.60,
   "isolation_forest": {
-    "n_estimators": 200,
-    "max_samples": 10000,
+    "n_estimators": 300,
+    "selected_max_samples": 15000,
+    "selected_max_features": 1.0,
     "contamination": "auto"
   },
   "autoencoder": {
-    "hidden_dimensions": [64, 32],
-    "latent_dimension": 12,
-    "dropout": 0.1,
-    "batch_size": 1024,
-    "epochs": 12,
+    "hidden_dimensions": [128, 64],
+    "latent_dimension": 16,
+    "dropout": 0.05,
+    "batch_size": 512,
+    "maximum_epochs": 30,
     "learning_rate": 0.001,
     "weight_decay": 0.00001,
-    "early_stopping_patience": 3
+    "noise_standard_deviation": 0.03,
+    "early_stopping_patience": 5,
+    "loss": "SmoothL1"
   }
 }

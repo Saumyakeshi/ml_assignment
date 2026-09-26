@@ -33,7 +33,7 @@ The Section 2 demonstration performs five-class intrusion detection on NSL-KDD, 
 
 ## Section 3 quick start
 
-The Section 3 demonstration cleans an unmodified CSE-CIC-IDS2018 daily flow CSV and compares a normal-only Isolation Forest with an Autoencoder. See the [Section 3 walkthrough](./docs/assignment/section-03-demonstration.md).
+The Section 3 demonstration cleans the UNSW-NB15 standard flow partitions and compares a normal-only tuned Isolation Forest with a denoising Autoencoder. See the [Section 3 walkthrough](./docs/assignment/section-03-demonstration.md).
 
 ## Section 4 quick start
 
